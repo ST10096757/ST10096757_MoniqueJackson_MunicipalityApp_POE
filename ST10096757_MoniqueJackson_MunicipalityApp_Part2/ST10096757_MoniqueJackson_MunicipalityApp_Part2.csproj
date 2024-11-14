@@ -96,12 +96,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BinarySearchTree.cs" />
     <Compile Include="Controls\MyOptions.xaml.cs">
       <DependentUpon>MyOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\myTextBox.xaml.cs">
       <DependentUpon>myTextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MaxHeap.cs" />
     <Compile Include="Windows\EmergencyContactsWindow.xaml.cs">
       <DependentUpon>EmergencyContactsWindow.xaml</DependentUpon>
     </Compile>
