@@ -92,7 +92,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="Styles\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
@@ -102,7 +102,7 @@
     <Compile Include="Controls\myTextBox.xaml.cs">
       <DependentUpon>myTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EmergencyContactsWindow.xaml.cs">
+    <Compile Include="Windows\EmergencyContactsWindow.xaml.cs">
       <DependentUpon>EmergencyContactsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\EventManager.cs" />
@@ -131,7 +131,7 @@
     <Compile Include="Views\ViewIssue_UC.xaml.cs">
       <DependentUpon>ViewIssue_UC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WindowController.xaml.cs">
+    <Compile Include="Windows\WindowController.xaml.cs">
       <DependentUpon>WindowController.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\MyOptions.xaml">
@@ -142,7 +142,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EmergencyContactsWindow.xaml">
+    <Page Include="Windows\EmergencyContactsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,7 +150,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="Styles\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -178,7 +178,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WindowController.xaml">
+    <Page Include="Windows\WindowController.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -202,7 +202,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
-    <None Include="BillOfRights.pdf">
+    <None Include="PDFs\BillOfRights.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
