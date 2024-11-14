@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models
 {
+	//Dude...you need to handle this
 	public class NotificationManager
 	{
 		private Stack<string> notifications;
