@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views.ViewIssue_UC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             
+             xmlns:local="clr-namespace:ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models"
+             mc:Ignorable="d" Height="550" Width="900" Background="Transparent" >
+
+    <UserControl.Resources>
+        <local:FileTypeToVisibilityConverter x:Key="FileTypeToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Border Background="#72BF78" Padding="30" CornerRadius="25">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Background Colour -->
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#D3EE98" Offset="0.0" />
+                        <GradientStop Color="#C0EBA6" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <!-- Heading -->
+                <TextBlock Grid.Row="0" Text="View Submitted Issues"
+                           FontSize="36"
+                           FontWeight="Black"
+                           HorizontalAlignment="Center" Margin="0,10,0,20"
+                           Foreground="#114232" FontFamily="Bahnschrift Condensed"/>
+
+                <!-- List Box for Issues -->
+                <ListBox x:Name="IssuesListBox" Grid.Row="1" Margin="10" Padding="10" Background="White"
+         BorderBrush="#C0C0C0" BorderThickness="1" ItemsSource="{Binding Issues}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5">
+                                <TextBlock Text="{Binding Location}" FontWeight="Bold" FontSize="16" />
+                                <TextBlock Text="{Binding Category}" FontSize="14" Margin="0,2,0,2" />
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontSize="14" Margin="0,2,0,2" />
+                                <TextBlock Text="{Binding AttachedFiles.Count, StringFormat='Attached Files: {0}'}" FontSize="14" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!-- Back Button -->
+                <Button Content="Back" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10"
+                        Click="BackButton_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

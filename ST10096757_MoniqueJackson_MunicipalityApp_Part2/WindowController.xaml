@@ -1,0 +1,20 @@
+﻿<Window x:Class="ST10096757_MoniqueJackson_MunicipalityApp_Part2.WindowController"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ST10096757_MoniqueJackson_MunicipalityApp_Part2"
+        mc:Ignorable="d" Height="650" Width="1000" Background="Transparent" 
+        WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
+    
+    <Border Background="#A0D683" CornerRadius="40" BorderThickness="5" BorderBrush="#D3EE98"
+            Padding="20" MouseDown="Border_MouseDown">
+        <Border CornerRadius="40">
+            <!-- Placeholder for user control -->
+            <ContentControl x:Name="ContentControlHost"/>
+        </Border>
+    </Border>
+</Window>
