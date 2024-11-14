@@ -105,13 +105,13 @@
     <Compile Include="EmergencyContactsWindow.xaml.cs">
       <DependentUpon>EmergencyContactsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\EventManager.cs" />
+    <Compile Include="Managers\EventManager.cs" />
     <Compile Include="Models\EventsClass.cs" />
-    <Compile Include="Models\EventSearchManager.cs" />
-    <Compile Include="Models\FileTypeToVisibilityConverter.cs" />
+    <Compile Include="Managers\EventSearchManager.cs" />
+    <Compile Include="Converters\FileTypeToVisibilityConverter.cs" />
     <Compile Include="Models\MediaItem.cs" />
-    <Compile Include="Models\NotificationManager.cs" />
-    <Compile Include="Models\RecommendationManager.cs" />
+    <Compile Include="Managers\NotificationManager.cs" />
+    <Compile Include="Managers\RecommendationManager.cs" />
     <Compile Include="Models\ServiceRequest.cs" />
     <Compile Include="ViewModels\ServiceRequestViewModel.cs" />
     <Compile Include="Views\EventDetailsView.xaml.cs">
