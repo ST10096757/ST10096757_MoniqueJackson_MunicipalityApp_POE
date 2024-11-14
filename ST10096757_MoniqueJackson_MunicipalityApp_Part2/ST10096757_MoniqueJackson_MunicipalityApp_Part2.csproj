@@ -112,6 +112,8 @@
     <Compile Include="Models\MediaItem.cs" />
     <Compile Include="Models\NotificationManager.cs" />
     <Compile Include="Models\RecommendationManager.cs" />
+    <Compile Include="Models\ServiceRequest.cs" />
+    <Compile Include="ViewModels\ServiceRequestViewModel.cs" />
     <Compile Include="Views\EventDetailsView.xaml.cs">
       <DependentUpon>EventDetailsView.xaml</DependentUpon>
     </Compile>
@@ -122,6 +124,9 @@
     <Compile Include="ViewModels\IssuesViewModel.cs" />
     <Compile Include="Views\ReportIssues.xaml.cs">
       <DependentUpon>ReportIssues.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ServiceRequestStatusPage.xaml.cs">
+      <DependentUpon>ServiceRequestStatusPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewIssue_UC.xaml.cs">
       <DependentUpon>ViewIssue_UC.xaml</DependentUpon>
@@ -162,6 +167,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReportIssues.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ServiceRequestStatusPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
