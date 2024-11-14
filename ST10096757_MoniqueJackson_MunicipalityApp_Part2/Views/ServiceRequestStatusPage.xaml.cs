@@ -31,6 +31,13 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 			this.DataContext = _viewModel; // Set the DataContext for binding
 			PopulateRequestList();
 		}
+		// Method to load a user control dynamically
+		public void LoadUserControl(UserControl userControl)
+		{
+			// Assuming there's a container like a Grid or StackPanel to load the UserControl into
+			MyContainer.Children.Clear(); // Clear existing controls (if any)
+			MyContainer.Children.Add(userControl); // Add the new UserControl dynamically
+		}
 
 		private void PopulateRequestList()
 		{
@@ -86,5 +93,6 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 				MessageBox.Show("Please select a request first.");
 			}
 		}
+
 	}
 }

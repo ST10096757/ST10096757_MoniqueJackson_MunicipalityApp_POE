@@ -124,6 +124,14 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 			EmergencyContactsWindow contactsWindow = new EmergencyContactsWindow();
 			contactsWindow.ShowDialog();
 		}
-		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-	}
+
+		private void btn_Status_Click(object sender, RoutedEventArgs e)
+		{
+			// Create a new Window or use an existing Window to display the ServiceRequestStatusPage UserControl
+			WindowController windowController = new WindowController(); // Create a new window controller
+			windowController.LoadUserControl(new ServiceRequestStatusPage()); // Load the ServiceRequestStatusPage user control
+			windowController.Show(); // Display the window
+		}
+        //---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+    }
 }
