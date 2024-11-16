@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ST10096757_MoniqueJackson_MunicipalityApp_Part2;
 using System.ComponentModel;
+using ST10096757_MoniqueJackson_MunicipalityApp_Part2;
 
 public class ServiceRequestViewModel : INotifyPropertyChanged
 {
@@ -39,6 +39,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		}
 	}
 
+	// Selected Category - filters by status or type of request
 	public string SelectedCategory
 	{
 		get { return _selectedCategory; }
@@ -50,6 +51,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		}
 	}
 
+	// Selected Priority - filters by priority level (High, Medium, Low)
 	public string SelectedPriority
 	{
 		get { return _selectedPriority; }
@@ -73,12 +75,19 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 
 	public bool IsRequestSelected => SelectedRequest != null;
 
+	// Properties for Categories and Priorities (to bind to ComboBoxes)
+	public List<string> Categories { get; set; }
+	public List<string> Priorities { get; set; }
+
 	// Initialize the service request tree and collections
 	public ServiceRequestViewModel()
 	{
 		serviceRequestTree = new BinarySearchTree(); // Initialize the BST
 		priorityQueue = new MaxHeap(); // Initialize the MaxHeap
 		_filteredServiceRequests = new ObservableCollection<ServiceRequest>();
+		Categories = new List<string> { "All", "Pending", "In Progress", "Completed" };
+		Priorities = new List<string> { "All", "High", "Medium", "Low" };
+
 		LoadServiceRequests();  // Load requests from JSON file
 	}
 

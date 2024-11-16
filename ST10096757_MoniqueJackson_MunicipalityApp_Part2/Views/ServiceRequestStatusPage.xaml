@@ -19,27 +19,25 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,60,10,10">
             <Label Content="Status Filter" />
             <ComboBox x:Name="cmbStatusFilter" Width="200" VerticalAlignment="Top" 
-                      SelectionChanged="cmbStatusFilter_SelectionChanged" 
-                      SelectedItem="{Binding SelectedCategory}">
-                <ComboBoxItem>All</ComboBoxItem>
-                <ComboBoxItem>Pending</ComboBoxItem>
-                <ComboBoxItem>In Progress</ComboBoxItem>
-                <ComboBoxItem>Completed</ComboBoxItem>
+              SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
+                <ComboBox.ItemsSource>
+                    <Binding Path="Categories" />
+                </ComboBox.ItemsSource>
             </ComboBox>
         </StackPanel>
+
 
         <!-- Priority Filter ComboBox with Label -->
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,60,10,10">
             <Label Content="Priority Filter" />
             <ComboBox x:Name="cmbPriorityFilter" Width="200" VerticalAlignment="Top" 
-                      SelectionChanged="cmbPriorityFilter_SelectionChanged" 
-                      SelectedItem="{Binding SelectedPriority}">
-                <ComboBoxItem>All</ComboBoxItem>
-                <ComboBoxItem>High</ComboBoxItem>
-                <ComboBoxItem>Medium</ComboBoxItem>
-                <ComboBoxItem>Low</ComboBoxItem>
+              SelectedItem="{Binding SelectedPriority, Mode=TwoWay}">
+                <ComboBox.ItemsSource>
+                    <Binding Path="Priorities" />
+                </ComboBox.ItemsSource>
             </ComboBox>
         </StackPanel>
+
 
         <!-- ListView -->
         <ListView x:Name="dataGridRequests" ItemsSource="{Binding FilteredServiceRequests}" 

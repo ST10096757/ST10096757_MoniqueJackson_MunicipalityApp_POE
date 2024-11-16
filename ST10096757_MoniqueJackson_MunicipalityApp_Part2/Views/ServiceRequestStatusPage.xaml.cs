@@ -39,27 +39,27 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void cmbStatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			// Trigger the ViewModel's filtering functionality by setting the SelectedCategory
-			if (cmbStatusFilter.SelectedItem is ComboBoxItem selectedItem)
-			{
-				_viewModel.SelectedCategory = selectedItem.Content.ToString();
-			}
-		}
+		//private void cmbStatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//{
+		//	// Trigger the ViewModel's filtering functionality by setting the SelectedCategory
+		//	if (cmbStatusFilter.SelectedItem is ComboBoxItem selectedItem)
+		//	{
+		//		_viewModel.SelectedCategory = selectedItem.Content.ToString();
+		//	}
+		//}
 
 		/// <summary>
 		/// Priority Filter ComboBox Selection Changed
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void cmbPriorityFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			// Trigger the ViewModel's filtering functionality by setting the SelectedPriority
-			if (cmbPriorityFilter.SelectedItem is ComboBoxItem selectedItem)
-			{
-				_viewModel.SelectedPriority = selectedItem.Content.ToString();
-			}
-		}
+		//private void cmbPriorityFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		//{
+		//	// Trigger the ViewModel's filtering functionality by setting the SelectedPriority
+		//	if (cmbPriorityFilter.SelectedItem is ComboBoxItem selectedItem)
+		//	{
+		//		_viewModel.SelectedPriority = selectedItem.Content.ToString();
+		//	}
+		//}
 	}
 }
