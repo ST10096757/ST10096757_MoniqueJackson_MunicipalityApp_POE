@@ -106,6 +106,7 @@
     <Compile Include="Controls\myTextBox.xaml.cs">
       <DependentUpon>myTextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Managers\ServiceRequestManager.cs" />
     <Compile Include="MaxHeap.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Windows\EmergencyContactsWindow.xaml.cs">
