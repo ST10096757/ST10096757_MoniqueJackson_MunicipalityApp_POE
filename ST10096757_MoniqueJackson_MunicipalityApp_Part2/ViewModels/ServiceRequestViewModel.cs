@@ -1,19 +1,23 @@
-﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
+﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2;
 using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Managers;
+using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System;
 using System.Linq;
+using System.Windows.Input;
 
 public class ServiceRequestViewModel : INotifyPropertyChanged
 {
-	// Change the key type to string
 	private Dictionary<string, ServiceRequest> _serviceRequests;
 	private ObservableCollection<ServiceRequest> _filteredServiceRequests;
 	private string _searchQuery;
 	private string _selectedCategory;
+	private string _selectedPriority;
 	private ServiceRequest _selectedRequest;
+
+	// ICommand for the search button
+	public ICommand SearchCommand { get; private set; }
 
 	// Properties for data binding
 	public ObservableCollection<ServiceRequest> FilteredServiceRequests
@@ -33,7 +37,6 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		{
 			_searchQuery = value;
 			OnPropertyChanged(nameof(SearchQuery));
-			FilterRequests(); // Re-filter when search query changes
 		}
 	}
 
@@ -44,7 +47,18 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		{
 			_selectedCategory = value;
 			OnPropertyChanged(nameof(SelectedCategory));
-			FilterRequests(); // Re-filter when category changes
+			FilterRequests(); // Re-filter when status changes
+		}
+	}
+
+	public string SelectedPriority
+	{
+		get { return _selectedPriority; }
+		set
+		{
+			_selectedPriority = value;
+			OnPropertyChanged(nameof(SelectedPriority));
+			FilterRequests(); // Re-filter when priority changes
 		}
 	}
 
@@ -61,24 +75,29 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	public bool IsRequestSelected => SelectedRequest != null;
 
 	public List<string> Categories { get; set; }
+	public List<string> Priorities { get; set; }
 
 	// Constructor
 	public ServiceRequestViewModel()
 	{
-		_serviceRequests = new Dictionary<string, ServiceRequest>(); // Use string as the key
+		_serviceRequests = new Dictionary<string, ServiceRequest>();
 		_filteredServiceRequests = new ObservableCollection<ServiceRequest>();
-		Categories = new List<string> { "All", "Pending", "In Progress", "Completed", "High", "Medium", "Low" };
+		Categories = new List<string> { "All", "Pending", "In Progress", "Completed" };
+		Priorities = new List<string> { "All", "High", "Medium", "Low" };
 
-		// Initialize with data from the JSON
+		// Initialize service requests
 		InitializeServiceRequests();
+
+		// Initialize the command
+		SearchCommand = new RelayCommand(ExecuteSearch);
 	}
 
+	// Initialize the service requests (example)
 	private void InitializeServiceRequests()
 	{
 		var serviceRequestManager = new ServiceRequestManager();
 		var loadedRequests = serviceRequestManager.LoadServiceRequests(); // Returns Dictionary<string, ServiceRequest>
 
-		// Populate the dictionary with the loaded requests
 		foreach (var request in loadedRequests)
 		{
 			_serviceRequests[request.Key] = request.Value;
@@ -88,26 +107,33 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		FilterRequests();
 	}
 
-
-	// Filter requests based on search query and selected category
+	// Filter requests based on search query, selected status, and selected priority
 	private void FilterRequests()
 	{
-		var filtered = _serviceRequests.Values.AsEnumerable(); // Use Values to get all ServiceRequest objects
+		var filtered = _serviceRequests.Values.AsEnumerable();
 
-		// Filter by search query (case-insensitive)
 		if (!string.IsNullOrEmpty(SearchQuery))
 		{
-			filtered = filtered.Where(r => r.Description.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0);
+			filtered = filtered.Where(r => r.Description.IndexOf(SearchQuery, System.StringComparison.OrdinalIgnoreCase) >= 0);
 		}
 
-		// Filter by category (status or priority)
 		if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
 		{
-			filtered = filtered.Where(r => r.Status == SelectedCategory || r.Priority == SelectedCategory);
+			filtered = filtered.Where(r => r.Status == SelectedCategory);
 		}
 
-		// Update the filtered list
+		if (!string.IsNullOrEmpty(SelectedPriority) && SelectedPriority != "All")
+		{
+			filtered = filtered.Where(r => r.Priority == SelectedPriority);
+		}
+
 		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filtered);
+	}
+
+	// Command execution for search
+	private void ExecuteSearch()
+	{
+		FilterRequests();
 	}
 
 	// Event for INotifyPropertyChanged
@@ -117,4 +143,3 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }
-

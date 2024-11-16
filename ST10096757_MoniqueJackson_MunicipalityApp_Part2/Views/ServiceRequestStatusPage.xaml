@@ -4,27 +4,46 @@
              xmlns:local="clr-namespace:ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views"
              xmlns:vm="clr-namespace:ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels"
              x:Name="ServiceRequestPage"
-    Height="600" Width="900">
+             Height="600" Width="900">
+
     <Grid>
         <!-- Search Box -->
         <TextBox x:Name="txtRequestId" Width="200" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10"
                  Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"  />
 
-        <!-- Status Filter ComboBox -->
-        <ComboBox x:Name="cmbStatusFilter" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,40,10,10"
-                  SelectionChanged="cmbStatusFilter_SelectionChanged" SelectedItem="{Binding SelectedCategory}">
-            <ComboBoxItem>All</ComboBoxItem>
-            <ComboBoxItem>Pending</ComboBoxItem>
-            <ComboBoxItem>In Progress</ComboBoxItem>
-            <ComboBoxItem>Completed</ComboBoxItem>
-            <ComboBoxItem>High</ComboBoxItem>
-            <ComboBoxItem>Medium</ComboBoxItem>
-            <ComboBoxItem>Low</ComboBoxItem>
-        </ComboBox>
+        <!-- Search Button -->
+        <Button Content="Search" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="220,10,10,10"
+                Command="{Binding SearchCommand}" />
+
+        <!-- Status Filter ComboBox with Label -->
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,60,10,10">
+            <Label Content="Status Filter" />
+            <ComboBox x:Name="cmbStatusFilter" Width="200" VerticalAlignment="Top" 
+                      SelectionChanged="cmbStatusFilter_SelectionChanged" 
+                      SelectedItem="{Binding SelectedCategory}">
+                <ComboBoxItem>All</ComboBoxItem>
+                <ComboBoxItem>Pending</ComboBoxItem>
+                <ComboBoxItem>In Progress</ComboBoxItem>
+                <ComboBoxItem>Completed</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Priority Filter ComboBox with Label -->
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,60,10,10">
+            <Label Content="Priority Filter" />
+            <ComboBox x:Name="cmbPriorityFilter" Width="200" VerticalAlignment="Top" 
+                      SelectionChanged="cmbPriorityFilter_SelectionChanged" 
+                      SelectedItem="{Binding SelectedPriority}">
+                <ComboBoxItem>All</ComboBoxItem>
+                <ComboBoxItem>High</ComboBoxItem>
+                <ComboBoxItem>Medium</ComboBoxItem>
+                <ComboBoxItem>Low</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
 
         <!-- ListView -->
         <ListView x:Name="dataGridRequests" ItemsSource="{Binding FilteredServiceRequests}" 
-                  SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" Margin="10,80,10,10" 
+                  SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" Margin="10,110,10,10" 
                   AlternationCount="2">
             <ListView.View>
                 <GridView>
@@ -36,9 +55,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
-        <!-- Update Status Button -->
-        <!--<Button Content="Update Status" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
-                Margin="10" Click="btnUpdateStatus_Click" />-->
     </Grid>
 </UserControl>
