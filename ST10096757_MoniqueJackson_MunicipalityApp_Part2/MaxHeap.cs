@@ -47,7 +47,7 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 			}
 		}
 
-		private void HeapifyDown(int index)
+		public void HeapifyDown(int index)
 		{
 			int left = 2 * index + 1;
 			int right = 2 * index + 2;

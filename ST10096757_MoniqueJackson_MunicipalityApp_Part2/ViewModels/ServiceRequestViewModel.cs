@@ -10,6 +10,7 @@ using System.ComponentModel;
 public class ServiceRequestViewModel : INotifyPropertyChanged
 {
 	private BinarySearchTree serviceRequestTree;
+	private MaxHeap priorityQueue;
 	private ObservableCollection<ServiceRequest> _filteredServiceRequests;
 	private string _searchQuery;
 	private string _selectedCategory;
@@ -76,6 +77,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	public ServiceRequestViewModel()
 	{
 		serviceRequestTree = new BinarySearchTree(); // Initialize the BST
+		priorityQueue = new MaxHeap(); // Initialize the MaxHeap
 		_filteredServiceRequests = new ObservableCollection<ServiceRequest>();
 		LoadServiceRequests();  // Load requests from JSON file
 	}
@@ -89,19 +91,26 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		// Load the requests from the JSON file
 		var serviceRequests = serviceRequestManager.LoadServiceRequests();
 
-		// Insert each service request into the BinarySearchTree
+		// Insert each service request into both the BinarySearchTree and the MaxHeap
 		foreach (var request in serviceRequests.Values)
 		{
-			InsertRequest(request);  // Insert into the BST
+			InsertRequestIntoTree(request);  // Insert into the BST
+			InsertRequestIntoHeap(request);  // Insert into the MaxHeap
 		}
 
 		FilterRequests();  // Initially apply filtering after data is loaded
 	}
 
 	// Insert a service request into the BinarySearchTree
-	public void InsertRequest(ServiceRequest request)
+	public void InsertRequestIntoTree(ServiceRequest request)
 	{
 		serviceRequestTree.Insert(request);  // Insert into the BST
+	}
+
+	// Insert a service request into the MaxHeap
+	public void InsertRequestIntoHeap(ServiceRequest request)
+	{
+		priorityQueue.Insert(request);  // Insert into the MaxHeap
 	}
 
 	// Search requests by RequestId using the BinarySearchTree
@@ -133,19 +142,33 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	{
 		var filtered = new List<ServiceRequest>();
 
-		serviceRequestTree.InOrderTraversal(req =>
+		// Clone the heap and process the elements one by one
+		var tempHeap = new MaxHeap();
+
+		// Copy all elements to a temporary heap (so we don't modify the original heap during extraction)
+		while (!priorityQueue.IsEmpty())
+		{
+			var topRequest = priorityQueue.ExtractMax();  // Extract the highest priority request
+			filtered.Add(topRequest);  // Add to the filtered list
+			tempHeap.Insert(topRequest);  // Reinsert into the temporary heap
+		}
+
+		// Filter based on category and priority
+		var filteredRequests = filtered.Where(req =>
 		{
 			bool matchesCategory = string.IsNullOrEmpty(SelectedCategory) || SelectedCategory == "All" || req.Status == SelectedCategory;
 			bool matchesPriority = string.IsNullOrEmpty(SelectedPriority) || SelectedPriority == "All" || req.Priority == SelectedPriority;
-
-			if (matchesCategory && matchesPriority)
-			{
-				filtered.Add(req);
-			}
-		});
+			return matchesCategory && matchesPriority;
+		}).ToList();
 
 		// Update the ObservableCollection with the filtered list
-		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filtered);
+		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filteredRequests);
+	}
+
+	// Extract the highest priority service request from the heap
+	public ServiceRequest GetTopPriorityRequest()
+	{
+		return priorityQueue.ExtractMax();  // Get the highest priority request from the heap
 	}
 
 	// Event for INotifyPropertyChanged
