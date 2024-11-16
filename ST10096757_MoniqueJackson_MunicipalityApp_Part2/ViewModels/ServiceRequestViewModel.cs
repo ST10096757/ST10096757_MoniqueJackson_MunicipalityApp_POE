@@ -1,88 +1,120 @@
 ﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
-using System;
+using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Managers;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels
+public class ServiceRequestViewModel : INotifyPropertyChanged
 {
-	public class ServiceRequestViewModel : INotifyPropertyChanged
+	// Change the key type to string
+	private Dictionary<string, ServiceRequest> _serviceRequests;
+	private ObservableCollection<ServiceRequest> _filteredServiceRequests;
+	private string _searchQuery;
+	private string _selectedCategory;
+	private ServiceRequest _selectedRequest;
+
+	// Properties for data binding
+	public ObservableCollection<ServiceRequest> FilteredServiceRequests
 	{
-		private BinarySearchTree _serviceRequestBST;
-		private MaxHeap _serviceRequestHeap;
-		private Dictionary<int, ServiceRequest> _serviceRequests;
-
-		public Dictionary<int, ServiceRequest> ServiceRequests
+		get { return _filteredServiceRequests; }
+		set
 		{
-			get { return _serviceRequests; }
-			set
-			{
-				_serviceRequests = value;
-				OnPropertyChanged(nameof(ServiceRequests));
-			}
-		}
-
-		public ServiceRequestViewModel()
-		{
-			_serviceRequests = new Dictionary<int, ServiceRequest>();
-			_serviceRequestBST = new BinarySearchTree();
-			_serviceRequestHeap = new MaxHeap();
-			// Example data initialization
-			InitializeServiceRequests();
-		}
-
-		private void InitializeServiceRequests()
-		{
-			// Add example requests to BST and Heap for initial data
-			var requests = new List<ServiceRequest>
-			{
-				new ServiceRequest(1, "Streetlight repair", "Pending", "High", DateTime.Now),
-				new ServiceRequest(2, "Pothole filling", "In Progress", "Medium", DateTime.Now.AddDays(-1)),
-				new ServiceRequest(3, "Water leak", "Completed", "High", DateTime.Now.AddDays(-3))
-			};
-
-			foreach (var request in requests)
-			{
-				_serviceRequestBST.Insert(request);
-				_serviceRequestHeap.Insert(request);
-				_serviceRequests[request.RequestId] = request;  // Add to the dictionary
-			}
-
-			UpdateServiceRequestsList();
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-		protected virtual void OnPropertyChanged(string propertyName)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		// Update the ServiceRequests list from the BST
-		private void UpdateServiceRequestsList()
-		{
-			var sortedRequests = new List<ServiceRequest>();
-			_serviceRequestBST.InOrderTraversal(request => sortedRequests.Add(request));
-			// Convert the sorted requests to a dictionary (in case we need it later)
-			ServiceRequests = sortedRequests.ToDictionary(r => r.RequestId);
-		}
-
-		// Update the status of a specific service request
-		public void UpdateRequestStatus(int requestId, string newStatus)
-		{
-			if (_serviceRequests.ContainsKey(requestId))
-			{
-				var request = _serviceRequests[requestId];
-				request.Status = newStatus;
-				OnPropertyChanged(nameof(ServiceRequests));
-			}
-		}
-
-		// Get the highest priority service request from the heap
-		public ServiceRequest GetHighestPriorityRequest()
-		{
-			return _serviceRequestHeap.ExtractMax();
+			_filteredServiceRequests = value;
+			OnPropertyChanged(nameof(FilteredServiceRequests));
 		}
 	}
+
+	public string SearchQuery
+	{
+		get { return _searchQuery; }
+		set
+		{
+			_searchQuery = value;
+			OnPropertyChanged(nameof(SearchQuery));
+			FilterRequests(); // Re-filter when search query changes
+		}
+	}
+
+	public string SelectedCategory
+	{
+		get { return _selectedCategory; }
+		set
+		{
+			_selectedCategory = value;
+			OnPropertyChanged(nameof(SelectedCategory));
+			FilterRequests(); // Re-filter when category changes
+		}
+	}
+
+	public ServiceRequest SelectedRequest
+	{
+		get { return _selectedRequest; }
+		set
+		{
+			_selectedRequest = value;
+			OnPropertyChanged(nameof(SelectedRequest));
+		}
+	}
+
+	public bool IsRequestSelected => SelectedRequest != null;
+
+	public List<string> Categories { get; set; }
+
+	// Constructor
+	public ServiceRequestViewModel()
+	{
+		_serviceRequests = new Dictionary<string, ServiceRequest>(); // Use string as the key
+		_filteredServiceRequests = new ObservableCollection<ServiceRequest>();
+		Categories = new List<string> { "All", "Pending", "In Progress", "Completed", "High", "Medium", "Low" };
+
+		// Initialize with data from the JSON
+		InitializeServiceRequests();
+	}
+
+	private void InitializeServiceRequests()
+	{
+		// Load service requests from the file
+		var serviceRequestManager = new ServiceRequestManager();
+		var loadedRequests = serviceRequestManager.LoadServiceRequests(); // Returns Dictionary<string, ServiceRequest>
+
+		// Populate the dictionary with the loaded requests
+		foreach (var request in loadedRequests)
+		{
+			_serviceRequests[request.Key] = request.Value;
+		}
+
+		// Initially show all requests
+		FilterRequests();
+	}
+
+	// Filter requests based on search query and selected category
+	private void FilterRequests()
+	{
+		var filtered = _serviceRequests.Values.AsEnumerable(); // Use Values to get all ServiceRequest objects
+
+		// Filter by search query (case-insensitive)
+		if (!string.IsNullOrEmpty(SearchQuery))
+		{
+			filtered = filtered.Where(r => r.Description.IndexOf(SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0);
+		}
+
+		// Filter by category (status or priority)
+		if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
+		{
+			filtered = filtered.Where(r => r.Status == SelectedCategory || r.Priority == SelectedCategory);
+		}
+
+		// Update the filtered list
+		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filtered);
+	}
+
+	// Event for INotifyPropertyChanged
+	public event PropertyChangedEventHandler PropertyChanged;
+	protected virtual void OnPropertyChanged(string propertyName)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
 }
+

@@ -1,19 +1,8 @@
 ﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
 using ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 {
@@ -31,71 +20,51 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 			this.DataContext = _viewModel; // Set the DataContext for binding
 			PopulateRequestList();
 		}
+
 		// Method to load a user control dynamically
 		public void LoadUserControl(UserControl userControl)
 		{
 			// Assuming there's a container like a Grid or StackPanel to load the UserControl into
-			MyContainer.Children.Clear(); // Clear existing controls (if any)
-			MyContainer.Children.Add(userControl); // Add the new UserControl dynamically
+			//MyContainer.Children.Clear(); // Clear existing controls (if any)
+			//MyContainer.Children.Add(userControl); // Add the new UserControl dynamically
 		}
 
+		// Populates the request list in the ListView by binding to the ViewModel's FilteredServiceRequests
 		private void PopulateRequestList()
 		{
-			// Bind the DataGrid to the ServiceRequests list from the ViewModel
-			dataGridRequests.ItemsSource = _viewModel.ServiceRequests;
+			// The ListView is bound to FilteredServiceRequests automatically
+			// so no need to set the ItemsSource manually here anymore.
 		}
 
 		private void btnSearch_Click(object sender, RoutedEventArgs e)
 		{
-			if (int.TryParse(txtRequestId.Text, out int requestId))
-			{
-				// Use the dictionary to find the request
-				if (_viewModel.ServiceRequests.TryGetValue(requestId, out var request))
-				{
-					lblStatus.Content = $"Status: {request.Status}";
-					dataGridRequests.ItemsSource = new[] { request };
-				}
-				else
-				{
-					MessageBox.Show("Request ID not found.");
-				}
-			}
-			else
-			{
-				MessageBox.Show("Invalid Request ID.");
-			}
+			// Trigger the ViewModel's search functionality by setting the SearchQuery property
+			_viewModel.SearchQuery = txtRequestId.Text;
+
+			// You don't need to manually filter the ListView anymore. It will update automatically 
+			// when the SearchQuery property changes.
 		}
 
-		private void btnFilterByStatus_Click(object sender, RoutedEventArgs e)
+		private void cmbStatusFilter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			string statusFilter = ((ComboBoxItem)cmbStatusFilter.SelectedItem)?.Content.ToString();
-			if (statusFilter != "All")
+			// Trigger the ViewModel's filtering functionality by setting the SelectedCategory
+			if (cmbStatusFilter.SelectedItem is ComboBoxItem selectedItem)
 			{
-				// Filter the requests by status
-				var filteredRequests = _viewModel.ServiceRequests.Values
-					.Where(r => r.Status.Equals(statusFilter, StringComparison.OrdinalIgnoreCase))
-					.ToList();
-				dataGridRequests.ItemsSource = filteredRequests;
-			}
-			else
-			{
-				PopulateRequestList();
+				_viewModel.SelectedCategory = selectedItem.Content.ToString();
 			}
 		}
 
-		private void btnUpdateStatus_Click(object sender, RoutedEventArgs e)
-		{
-			if (dataGridRequests.SelectedItem is ServiceRequest selectedRequest)
-			{
-				// Update the status of the selected request
-				_viewModel.UpdateRequestStatus(selectedRequest.RequestId, "In Progress"); // Example status update
-				PopulateRequestList(); // Refresh the DataGrid
-			}
-			else
-			{
-				MessageBox.Show("Please select a request first.");
-			}
-		}
-
+		//private void btnUpdateStatus_Click(object sender, RoutedEventArgs e)
+		//{
+		//	if (_viewModel.SelectedRequest != null)
+		//	{
+		//		// Update the status of the selected request
+		//		_viewModel.UpdateRequestStatus(_viewModel.SelectedRequest.RequestId, "In Progress"); // Example status update
+		//	}
+		//	else
+		//	{
+		//		MessageBox.Show("Please select a request first.");
+		//	}
+		//}
 	}
 }
