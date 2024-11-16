@@ -12,9 +12,9 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels
 	{
 		private BinarySearchTree _serviceRequestBST;
 		private MaxHeap _serviceRequestHeap;
-		private List<ServiceRequest> _serviceRequests;
+		private Dictionary<int, ServiceRequest> _serviceRequests;
 
-		public List<ServiceRequest> ServiceRequests
+		public Dictionary<int, ServiceRequest> ServiceRequests
 		{
 			get { return _serviceRequests; }
 			set
@@ -26,7 +26,7 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels
 
 		public ServiceRequestViewModel()
 		{
-			_serviceRequests = new List<ServiceRequest>();
+			_serviceRequests = new Dictionary<int, ServiceRequest>();
 			_serviceRequestBST = new BinarySearchTree();
 			_serviceRequestHeap = new MaxHeap();
 			// Example data initialization
@@ -47,6 +47,7 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels
 			{
 				_serviceRequestBST.Insert(request);
 				_serviceRequestHeap.Insert(request);
+				_serviceRequests[request.RequestId] = request;  // Add to the dictionary
 			}
 
 			UpdateServiceRequestsList();
@@ -63,15 +64,16 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels
 		{
 			var sortedRequests = new List<ServiceRequest>();
 			_serviceRequestBST.InOrderTraversal(request => sortedRequests.Add(request));
-			ServiceRequests = sortedRequests;
+			// Convert the sorted requests to a dictionary (in case we need it later)
+			ServiceRequests = sortedRequests.ToDictionary(r => r.RequestId);
 		}
 
 		// Update the status of a specific service request
 		public void UpdateRequestStatus(int requestId, string newStatus)
 		{
-			var request = _serviceRequests.FirstOrDefault(r => r.RequestId == requestId);
-			if (request != null)
+			if (_serviceRequests.ContainsKey(requestId))
 			{
+				var request = _serviceRequests[requestId];
 				request.Status = newStatus;
 				OnPropertyChanged(nameof(ServiceRequests));
 			}

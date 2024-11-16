@@ -49,8 +49,8 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 		{
 			if (int.TryParse(txtRequestId.Text, out int requestId))
 			{
-				var request = _viewModel.ServiceRequests.FirstOrDefault(r => r.RequestId == requestId);
-				if (request != null)
+				// Use the dictionary to find the request
+				if (_viewModel.ServiceRequests.TryGetValue(requestId, out var request))
 				{
 					lblStatus.Content = $"Status: {request.Status}";
 					dataGridRequests.ItemsSource = new[] { request };
@@ -71,7 +71,10 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 			string statusFilter = ((ComboBoxItem)cmbStatusFilter.SelectedItem)?.Content.ToString();
 			if (statusFilter != "All")
 			{
-				var filteredRequests = _viewModel.ServiceRequests.Where(r => r.Status.Equals(statusFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+				// Filter the requests by status
+				var filteredRequests = _viewModel.ServiceRequests.Values
+					.Where(r => r.Status.Equals(statusFilter, StringComparison.OrdinalIgnoreCase))
+					.ToList();
 				dataGridRequests.ItemsSource = filteredRequests;
 			}
 			else
