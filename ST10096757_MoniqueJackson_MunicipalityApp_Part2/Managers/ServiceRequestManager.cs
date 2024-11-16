@@ -3,17 +3,13 @@ using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Managers
 {
 	public class ServiceRequestManager
 	{
-		private const string FilePath = @"service_requests.json"; // Relative to the application's directory
-
-
+		// Update this path to point to the file in the output directory
+		private const string FilePath = "Resources\\service_requests.json";  // Relative file path
 
 		// Method to serialize and save service requests to a file
 		public void SaveServiceRequests(Dictionary<string, ServiceRequest> serviceRequests)
@@ -38,29 +34,27 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Managers
 		{
 			try
 			{
+				// Check if the file exists before attempting to load
 				if (File.Exists(FilePath))
 				{
+					// Read the JSON string from the file
 					string json = File.ReadAllText(FilePath);
+
+					// Deserialize the JSON into a dictionary of service requests
 					var serviceRequests = JsonConvert.DeserializeObject<Dictionary<string, ServiceRequest>>(json);
 					return serviceRequests;
 				}
 				else
 				{
-					Console.WriteLine("File does not exist.");
-					return new Dictionary<string, ServiceRequest>();
+					Console.WriteLine("No service requests file found.");
+					return new Dictionary<string, ServiceRequest>();  // Return an empty dictionary if the file doesn't exist
 				}
-			}
-			catch (UnauthorizedAccessException)
-			{
-				Console.WriteLine("Access denied: You do not have permission to access the file.");
-				return new Dictionary<string, ServiceRequest>();
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"An error occurred: {ex.Message}");
-				return new Dictionary<string, ServiceRequest>();
+				Console.WriteLine($"An error occurred while loading service requests: {ex.Message}");
+				return new Dictionary<string, ServiceRequest>();  // Return an empty dictionary in case of errors
 			}
 		}
-
 	}
 }

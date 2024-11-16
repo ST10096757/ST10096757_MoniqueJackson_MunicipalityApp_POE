@@ -75,7 +75,6 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 
 	private void InitializeServiceRequests()
 	{
-		// Load service requests from the file
 		var serviceRequestManager = new ServiceRequestManager();
 		var loadedRequests = serviceRequestManager.LoadServiceRequests(); // Returns Dictionary<string, ServiceRequest>
 
@@ -88,6 +87,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		// Initially show all requests
 		FilterRequests();
 	}
+
 
 	// Filter requests based on search query and selected category
 	private void FilterRequests()

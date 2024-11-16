@@ -1,0 +1,41 @@
+﻿{
+  "1": {
+    "RequestId": 1,
+    "ResidentName": "Monique Jackson",
+    "ContactDetails": "monique.j@example.com",
+    "RequestType": "Streetlight Repair",
+    "Description": "The streetlight in front of my house is not working.",
+    "SubmissionDate": "2023-11-16T10:00:00",
+    "Status": "Pending",
+    "Priority": "High",
+    "AssignedStaff": "John Doe",
+    "Location": "123 Elm St.",
+    "ProgressLogs": []
+  },
+  "2": {
+    "RequestId": 2,
+    "ResidentName": "Jake Davis",
+    "ContactDetails": "jake.d@example.com",
+    "RequestType": "Pothole Repair",
+    "Description": "There is a large pothole on Oak St. near the intersection.",
+    "SubmissionDate": "2023-11-15T15:30:00",
+    "Status": "In Progress",
+    "Priority": "Medium",
+    "AssignedStaff": "Sarah Lee",
+    "Location": "456 Oak St.",
+    "ProgressLogs": [ "Inspection completed", "Repair work started" ]
+  },
+  "3": {
+    "RequestId": 3,
+    "ResidentName": "Anna Smith",
+    "ContactDetails": "anna.s@example.com",
+    "RequestType": "Water Leak",
+    "Description": "There is a water leak in the basement of my building.",
+    "SubmissionDate": "2023-11-14T08:45:00",
+    "Status": "Completed",
+    "Priority": "High",
+    "AssignedStaff": "Tom Green",
+    "Location": "789 Pine St.",
+    "ProgressLogs": [ "Leak detected", "Repair completed" ]
+  }
+}
