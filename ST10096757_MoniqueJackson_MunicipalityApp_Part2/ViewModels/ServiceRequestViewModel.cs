@@ -1,23 +1,20 @@
-﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2;
+﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
 using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Managers;
-using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
+using ST10096757_MoniqueJackson_MunicipalityApp_Part2;
+using System.ComponentModel;
 
 public class ServiceRequestViewModel : INotifyPropertyChanged
 {
-	private Dictionary<string, ServiceRequest> _serviceRequests;
+	private BinarySearchTree serviceRequestTree;
 	private ObservableCollection<ServiceRequest> _filteredServiceRequests;
 	private string _searchQuery;
 	private string _selectedCategory;
 	private string _selectedPriority;
 	private ServiceRequest _selectedRequest;
-
-	// ICommand for the search button
-	public ICommand SearchCommand { get; private set; }
 
 	// Properties for data binding
 	public ObservableCollection<ServiceRequest> FilteredServiceRequests
@@ -37,6 +34,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		{
 			_searchQuery = value;
 			OnPropertyChanged(nameof(SearchQuery));
+			SearchRequests();  // Trigger the search when the query changes
 		}
 	}
 
@@ -47,7 +45,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		{
 			_selectedCategory = value;
 			OnPropertyChanged(nameof(SelectedCategory));
-			FilterRequests(); // Re-filter when status changes
+			FilterRequests();  // Trigger filtering when category changes
 		}
 	}
 
@@ -58,7 +56,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		{
 			_selectedPriority = value;
 			OnPropertyChanged(nameof(SelectedPriority));
-			FilterRequests(); // Re-filter when priority changes
+			FilterRequests();  // Trigger filtering when priority changes
 		}
 	}
 
@@ -74,70 +72,85 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 
 	public bool IsRequestSelected => SelectedRequest != null;
 
-	public List<string> Categories { get; set; }
-	public List<string> Priorities { get; set; }
-
-	// Constructor
+	// Initialize the service request tree and collections
 	public ServiceRequestViewModel()
 	{
-		_serviceRequests = new Dictionary<string, ServiceRequest>();
+		serviceRequestTree = new BinarySearchTree(); // Initialize the BST
 		_filteredServiceRequests = new ObservableCollection<ServiceRequest>();
-		Categories = new List<string> { "All", "Pending", "In Progress", "Completed" };
-		Priorities = new List<string> { "All", "High", "Medium", "Low" };
-
-		// Initialize service requests
-		InitializeServiceRequests();
-
-		// Initialize the command
-		SearchCommand = new RelayCommand(ExecuteSearch);
+		LoadServiceRequests();  // Load requests from JSON file
 	}
 
-	// Initialize the service requests (example)
-	private void InitializeServiceRequests()
+	// Load Service Requests from the ServiceRequestManager
+	public void LoadServiceRequests()
 	{
+		// Create an instance of ServiceRequestManager
 		var serviceRequestManager = new ServiceRequestManager();
-		var loadedRequests = serviceRequestManager.LoadServiceRequests(); // Returns Dictionary<string, ServiceRequest>
 
-		foreach (var request in loadedRequests)
+		// Load the requests from the JSON file
+		var serviceRequests = serviceRequestManager.LoadServiceRequests();
+
+		// Insert each service request into the BinarySearchTree
+		foreach (var request in serviceRequests.Values)
 		{
-			_serviceRequests[request.Key] = request.Value;
+			InsertRequest(request);  // Insert into the BST
 		}
 
-		// Initially show all requests
-		FilterRequests();
+		FilterRequests();  // Initially apply filtering after data is loaded
 	}
 
-	// Filter requests based on search query, selected status, and selected priority
-	private void FilterRequests()
+	// Insert a service request into the BinarySearchTree
+	public void InsertRequest(ServiceRequest request)
 	{
-		var filtered = _serviceRequests.Values.AsEnumerable();
+		serviceRequestTree.Insert(request);  // Insert into the BST
+	}
 
-		if (!string.IsNullOrEmpty(SearchQuery))
+	// Search requests by RequestId using the BinarySearchTree
+	private void SearchRequests()
+	{
+		var filtered = new List<ServiceRequest>();
+
+		if (int.TryParse(SearchQuery, out int requestId))
 		{
-			filtered = filtered.Where(r => r.Description.IndexOf(SearchQuery, System.StringComparison.OrdinalIgnoreCase) >= 0);
+			// Search by RequestId in the tree
+			var result = serviceRequestTree.Find(requestId);
+			if (result != null)
+			{
+				filtered.Add(result);  // Add to the filtered list if found
+			}
+		}
+		else
+		{
+			// If the search query isn't a valid integer, show all requests (in sorted order)
+			serviceRequestTree.InOrderTraversal(req => filtered.Add(req));
 		}
 
-		if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
-		{
-			filtered = filtered.Where(r => r.Status == SelectedCategory);
-		}
-
-		if (!string.IsNullOrEmpty(SelectedPriority) && SelectedPriority != "All")
-		{
-			filtered = filtered.Where(r => r.Priority == SelectedPriority);
-		}
-
+		// Update the ObservableCollection to trigger UI update
 		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filtered);
 	}
 
-	// Command execution for search
-	private void ExecuteSearch()
+	// Filter requests based on status and priority
+	private void FilterRequests()
 	{
-		FilterRequests();
+		var filtered = new List<ServiceRequest>();
+
+		serviceRequestTree.InOrderTraversal(req =>
+		{
+			bool matchesCategory = string.IsNullOrEmpty(SelectedCategory) || SelectedCategory == "All" || req.Status == SelectedCategory;
+			bool matchesPriority = string.IsNullOrEmpty(SelectedPriority) || SelectedPriority == "All" || req.Priority == SelectedPriority;
+
+			if (matchesCategory && matchesPriority)
+			{
+				filtered.Add(req);
+			}
+		});
+
+		// Update the ObservableCollection with the filtered list
+		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filtered);
 	}
 
 	// Event for INotifyPropertyChanged
 	public event PropertyChangedEventHandler PropertyChanged;
+
 	protected virtual void OnPropertyChanged(string propertyName)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
