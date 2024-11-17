@@ -106,9 +106,12 @@
     <Compile Include="Controls\myTextBox.xaml.cs">
       <DependentUpon>myTextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomPriorityQueue.cs" />
     <Compile Include="Managers\ServiceRequestManager.cs" />
     <Compile Include="MaxHeap.cs" />
+    <Compile Include="MinimumSpanningTree.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="ServiceRequestGraph.cs" />
     <Compile Include="Windows\EmergencyContactsWindow.xaml.cs">
       <DependentUpon>EmergencyContactsWindow.xaml</DependentUpon>
     </Compile>
