@@ -1,49 +1,51 @@
-﻿using System;
+﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2.MVVM.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 {
 	public class MinimumSpanningTree
 	{
-		public List<Tuple<int, int, int>> GenerateMST(ServiceRequestGraph graph, int startRequestId)
+		// Generate the Minimum Spanning Tree (MST) using Prim's Algorithm
+		public List<Edge> GenerateMST(Graph graph, int startRequestId)
 		{
-			var mst = new List<Tuple<int, int, int>>();  // List of edges (request1, request2, weight)
-			var visited = new HashSet<int>();
-			var priorityQueue = new CustomPriorityQueue<Tuple<int, int, int>>();  // Use the custom priority queue
+			var mst = new List<Edge>();  // List of edges that will form the MST
+			var visited = new HashSet<int>();  // Keep track of visited nodes
+			var priorityQueue = new CustomPriorityQueue<Edge, double>();  // Custom priority queue for edges
 
+			// Start from the initial request ID
 			visited.Add(startRequestId);
-			foreach (var neighbor in graph.GetAdjacentRequests(startRequestId))
+
+			// Add all the edges of the start request to the priority queue
+			foreach (var edge in graph.AdjacencyList[startRequestId])
 			{
-				priorityQueue.Enqueue(1, Tuple.Create(1, startRequestId, neighbor)); // Add edges with arbitrary weight 1
+				priorityQueue.Enqueue((int)edge.Weight, edge);  // Use the edge's weight as the priority
 			}
 
+			// Perform Prim's Algorithm
 			while (priorityQueue.Count > 0)
 			{
-				var edge = priorityQueue.Dequeue();
-				var weight = edge.Item1;
-				var request1 = edge.Item2;
-				var request2 = edge.Item3;
+				var edge = priorityQueue.Dequeue();  // Get the edge with the minimum weight
 
-				if (!visited.Contains(request2))
+				// If we haven't visited the end node of this edge yet, we add it to the MST
+				if (!visited.Contains(edge.End))
 				{
-					visited.Add(request2);
-					mst.Add(edge);
+					visited.Add(edge.End);  // Mark the end node as visited
+					mst.Add(edge);  // Add the edge to the MST
 
-					foreach (var neighbor in graph.GetAdjacentRequests(request2))
+					// Add all the adjacent edges to the priority queue
+					foreach (var nextEdge in graph.AdjacencyList[edge.End])
 					{
-						if (!visited.Contains(neighbor))
+						if (!visited.Contains(nextEdge.End))  // Only consider unvisited nodes
 						{
-							priorityQueue.Enqueue(1, Tuple.Create(1, request2, neighbor));
+							priorityQueue.Enqueue((int)nextEdge.Weight, nextEdge);  // Enqueue the edge with its weight as the priority
 						}
 					}
 				}
 			}
 
-			return mst;
+			return mst;  // Return the list of edges that form the MST
 		}
 	}
 }

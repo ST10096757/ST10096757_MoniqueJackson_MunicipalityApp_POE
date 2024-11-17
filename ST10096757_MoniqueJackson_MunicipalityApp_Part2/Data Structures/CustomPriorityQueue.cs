@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 {
-	public class CustomPriorityQueue<T>
+	public class CustomPriorityQueue<TElement, TPriority>
 	{
-		private SortedList<int, Queue<T>> _list;
+		private SortedList<int, Queue<TElement>> _list;  // Use TElement instead of T
 
 		public CustomPriorityQueue()
 		{
-			_list = new SortedList<int, Queue<T>>();
+			_list = new SortedList<int, Queue<TElement>>();  // Initialize the list of queues
 		}
 
-		public void Enqueue(int priority, T item)
+		// Enqueue method now accepts TElement
+		public void Enqueue(int priority, TElement item)
 		{
 			if (!_list.ContainsKey(priority))
 			{
-				_list[priority] = new Queue<T>();
+				_list[priority] = new Queue<TElement>();  // Use TElement here
 			}
 			_list[priority].Enqueue(item);
 		}
 
-		public T Dequeue()
+		// Dequeue method now returns TElement
+		public TElement Dequeue()
 		{
 			if (_list.Count == 0)
 			{
@@ -41,10 +41,10 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 				_list.Remove(highestPriority);
 			}
 
-			return item;
+			return item;  // Return TElement
 		}
 
-		public int Count => _list.Values.Sum(queue => queue.Count);
+		public int Count => _list.Values.Sum(queue => queue.Count);  // Sum of all items in the queues
 
 		public bool IsEmpty() => _list.Count == 0;
 	}

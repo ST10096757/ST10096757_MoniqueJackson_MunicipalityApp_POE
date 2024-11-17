@@ -113,6 +113,7 @@
     <Compile Include="Data Structures\MinimumSpanningTree.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Data Structures\ServiceRequestGraph.cs" />
+    <Compile Include="MVVM\Models\Edge.cs" />
     <Compile Include="Windows\EmergencyContactsWindow.xaml.cs">
       <DependentUpon>EmergencyContactsWindow.xaml</DependentUpon>
     </Compile>

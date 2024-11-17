@@ -6,11 +6,15 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.ComponentModel;
 using ST10096757_MoniqueJackson_MunicipalityApp_Part2;
+using ST10096757_MoniqueJackson_MunicipalityApp_Part2.MVVM.Models;
+using System.Windows.Input;
+using System.Text;
 
 public class ServiceRequestViewModel : INotifyPropertyChanged
 {
 	private Graph _serviceRequestGraph;
 	private List<Edge> _mstEdges;
+	public ICommand GenerateMSTCommand { get; set; }
 
 	private BinarySearchTree serviceRequestTree;
 	private MaxHeap priorityQueue;
@@ -93,6 +97,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		Categories = new List<string> { "All", "Pending", "In Progress", "Completed" };
 		Priorities = new List<string> { "All", "High", "Medium", "Low" };
 
+		GenerateMSTCommand = new RelayCommand(GenerateAndDisplayMST);
 		_serviceRequestGraph = new Graph();
 		_mstEdges = new List<Edge>();
 
@@ -118,26 +123,73 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 			InsertRequestIntoHeap(request);  // Insert into MaxHeap
 			AddToGraph(request, serviceRequestsIntKey);  // Add request dependencies to the graph
 		}
+		// Now compute the MST edges (using Prim's or Kruskal's algorithm)
+		List<Edge> mstEdges = _serviceRequestGraph.ComputeMST();
+		// Update the filtered service requests based on MST edges
+		UpdateFilteredServiceRequests(mstEdges);
 
 		FilterRequests();  // Filter the requests after all are loaded
 	}
 
+	public void UpdateFilteredServiceRequests(List<Edge> mstEdges)
+	{
+		// Ensure the list is not empty and there are valid edges to process
+		if (mstEdges == null || mstEdges.Count == 0)
+			return;
+
+		// Check that the keys exist in the dictionary before accessing
+		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(
+			mstEdges.Where(edge => _serviceRequestGraph.Requests.ContainsKey(edge.Start))  // Filter edges where Start exists in dictionary
+					.Select(edge => _serviceRequestGraph.Requests[edge.Start])  // Only select the ServiceRequest for valid keys
+		);
+	}
+
 	public void AddToGraph(ServiceRequest request, Dictionary<int, ServiceRequest> serviceRequests)
 	{
-		// Assuming you're working with a graph that has requests and edges
-		// Let's add edges between the current request and other requests based on priority or location
+		// Assuming you have a graph that has requests and edges
+		// Let's add edges between this request and other requests based on priority or location
 
 		// Example: Add edges between this request and all other requests
 		foreach (var otherRequest in serviceRequests.Values)
 		{
-			if (request.RequestId != otherRequest.RequestId)
+			if (request.RequestId != otherRequest.RequestId) // Ensure not adding an edge to itself
 			{
-				// Calculate the edge weight (could be based on priority or location)
+				// Calculate the edge weight (could be based on priority, distance, or location)
 				double weight = CalculateEdgeWeight(request, otherRequest);
 
-				// Add an edge between these two requests
-				_serviceRequestGraph.AddEdge(request, otherRequest, weight);
+				// Add an edge between these two requests (using their RequestId as the graph nodes)
+				_serviceRequestGraph.AddEdge(request.RequestId, otherRequest.RequestId, weight);
 			}
+		}
+	}
+
+	// This method could be called from the View (e.g., button click)
+	public void DisplayGraph()
+	{
+		// Collect the graph output into a string
+		StringBuilder graphOutput = new StringBuilder();
+		foreach (var node in _serviceRequestGraph.AdjacencyList)
+		{
+			graphOutput.AppendLine($"Node {node.Key}:");
+			foreach (var edge in node.Value)
+			{
+				graphOutput.AppendLine($"   -> {edge.End} with weight {edge.Weight}");
+			}
+		}
+
+		// Optionally, you could bind this output to a TextBox or ListBox
+		GraphDisplayText = graphOutput.ToString();
+	}
+
+	// Property for binding the display output in the UI
+	private string _graphDisplayText;
+	public string GraphDisplayText
+	{
+		get { return _graphDisplayText; }
+		set
+		{
+			_graphDisplayText = value;
+			OnPropertyChanged(nameof(GraphDisplayText));
 		}
 	}
 
@@ -175,14 +227,18 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	public void GenerateAndDisplayMST()
 	{
 		var mstGenerator = new MinimumSpanningTree();
-		var mst = mstGenerator.GenerateMST(serviceRequestGraph, 1);  // Starting from a node (e.g., requestId 1)
+
+		// Generate the MST from the graph, starting from a request with ID 1
+		var mstEdges = mstGenerator.GenerateMST(_serviceRequestGraph, 1);  // Passing the graph and starting requestId (e.g., 1)
 
 		// Optionally display the MST
-		foreach (var edge in mst)
+		foreach (var edge in mstEdges)
 		{
-			Console.WriteLine($"MST Edge: {edge.Item2} -> {edge.Item3}");
+			// Edge is of type 'Edge', so we access Start, End, and Weight directly
+			Console.WriteLine($"MST Edge: {edge.Start} -> {edge.End} with weight: {edge.Weight}");
 		}
 	}
+
 
 	// Filter requests based on status and priority
 	private void FilterRequests()
