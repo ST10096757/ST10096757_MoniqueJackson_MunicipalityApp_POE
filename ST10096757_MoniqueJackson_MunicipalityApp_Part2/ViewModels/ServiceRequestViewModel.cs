@@ -151,27 +151,35 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	{
 		var filtered = new List<ServiceRequest>();
 
-		// Clone the heap and process the elements one by one
+		// Create a temporary heap to preserve the original heap's state
 		var tempHeap = new MaxHeap();
 
-		// Copy all elements to a temporary heap (so we don't modify the original heap during extraction)
+		// Extract requests from the heap, filter them, and store in the filtered list
 		while (!priorityQueue.IsEmpty())
 		{
 			var topRequest = priorityQueue.ExtractMax();  // Extract the highest priority request
-			filtered.Add(topRequest);  // Add to the filtered list
-			tempHeap.Insert(topRequest);  // Reinsert into the temporary heap
+
+			// Apply filtering based on selected category and priority
+			bool matchesCategory = string.IsNullOrEmpty(SelectedCategory) || SelectedCategory == "All" || topRequest.Status == SelectedCategory;
+			bool matchesPriority = string.IsNullOrEmpty(SelectedPriority) || SelectedPriority == "All" || topRequest.Priority == SelectedPriority;
+
+			if (matchesCategory && matchesPriority)
+			{
+				filtered.Add(topRequest);  // Add to the filtered list
+			}
+
+			// Reinsert the extracted request back into the temporary heap
+			tempHeap.Insert(topRequest);
 		}
 
-		// Filter based on category and priority
-		var filteredRequests = filtered.Where(req =>
+		// Rebuild the priority queue (heap) with the original state
+		while (!tempHeap.IsEmpty())
 		{
-			bool matchesCategory = string.IsNullOrEmpty(SelectedCategory) || SelectedCategory == "All" || req.Status == SelectedCategory;
-			bool matchesPriority = string.IsNullOrEmpty(SelectedPriority) || SelectedPriority == "All" || req.Priority == SelectedPriority;
-			return matchesCategory && matchesPriority;
-		}).ToList();
+			priorityQueue.Insert(tempHeap.ExtractMax());
+		}
 
-		// Update the ObservableCollection with the filtered list
-		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filteredRequests);
+		// Update the ObservableCollection with the filtered requests
+		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(filtered);
 	}
 
 	// Extract the highest priority service request from the heap
