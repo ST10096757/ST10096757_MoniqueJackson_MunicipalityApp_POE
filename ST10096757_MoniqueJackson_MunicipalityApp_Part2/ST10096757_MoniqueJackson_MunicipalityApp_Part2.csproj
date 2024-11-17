@@ -99,46 +99,46 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BinarySearchTree.cs" />
+    <Compile Include="Data Structures\BinarySearchTree.cs" />
     <Compile Include="Controls\MyOptions.xaml.cs">
       <DependentUpon>MyOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\myTextBox.xaml.cs">
       <DependentUpon>myTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomPriorityQueue.cs" />
+    <Compile Include="Data Structures\CustomPriorityQueue.cs" />
     <Compile Include="Managers\ServiceRequestManager.cs" />
-    <Compile Include="MaxHeap.cs" />
-    <Compile Include="MinimumSpanningTree.cs" />
-    <Compile Include="RelayCommand.cs" />
-    <Compile Include="ServiceRequestGraph.cs" />
+    <Compile Include="Data Structures\MaxHeap.cs" />
+    <Compile Include="Data Structures\MinimumSpanningTree.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Data Structures\ServiceRequestGraph.cs" />
     <Compile Include="Windows\EmergencyContactsWindow.xaml.cs">
       <DependentUpon>EmergencyContactsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\EventManager.cs" />
-    <Compile Include="Models\EventsClass.cs" />
+    <Compile Include="MVVM\Models\EventsClass.cs" />
     <Compile Include="Managers\EventSearchManager.cs" />
     <Compile Include="Converters\FileTypeToVisibilityConverter.cs" />
-    <Compile Include="Models\MediaItem.cs" />
+    <Compile Include="MVVM\Models\MediaItem.cs" />
     <Compile Include="Managers\NotificationManager.cs" />
     <Compile Include="Managers\RecommendationManager.cs" />
-    <Compile Include="Models\ServiceRequest.cs" />
-    <Compile Include="ViewModels\ServiceRequestViewModel.cs" />
-    <Compile Include="Views\EventDetailsView.xaml.cs">
+    <Compile Include="MVVM\Models\ServiceRequest.cs" />
+    <Compile Include="MVVM\ViewModels\ServiceRequestViewModel.cs" />
+    <Compile Include="MVVM\Views\EventDetailsView.xaml.cs">
       <DependentUpon>EventDetailsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Events_Announce_UC.xaml.cs">
+    <Compile Include="MVVM\Views\Events_Announce_UC.xaml.cs">
       <DependentUpon>Events_Announce_UC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\IssuesClass.cs" />
-    <Compile Include="ViewModels\IssuesViewModel.cs" />
-    <Compile Include="Views\ReportIssues.xaml.cs">
+    <Compile Include="MVVM\Models\IssuesClass.cs" />
+    <Compile Include="MVVM\ViewModels\IssuesViewModel.cs" />
+    <Compile Include="MVVM\Views\ReportIssues.xaml.cs">
       <DependentUpon>ReportIssues.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ServiceRequestStatusPage.xaml.cs">
+    <Compile Include="MVVM\Views\ServiceRequestStatusPage.xaml.cs">
       <DependentUpon>ServiceRequestStatusPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ViewIssue_UC.xaml.cs">
+    <Compile Include="MVVM\Views\ViewIssue_UC.xaml.cs">
       <DependentUpon>ViewIssue_UC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\WindowController.xaml.cs">
@@ -168,23 +168,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\EventDetailsView.xaml">
+    <Page Include="MVVM\Views\EventDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Events_Announce_UC.xaml">
+    <Page Include="MVVM\Views\Events_Announce_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ReportIssues.xaml">
+    <Page Include="MVVM\Views\ReportIssues.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ServiceRequestStatusPage.xaml">
+    <Page Include="MVVM\Views\ServiceRequestStatusPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ViewIssue_UC.xaml">
+    <Page Include="MVVM\Views\ViewIssue_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -229,9 +229,7 @@
   <ItemGroup>
     <Resource Include="Images\Coat_of_Arms.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Styles\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.1.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
