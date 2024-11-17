@@ -107,6 +107,7 @@
       <DependentUpon>myTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data Structures\CustomPriorityQueue.cs" />
+    <Compile Include="Graph.cs" />
     <Compile Include="Managers\ServiceRequestManager.cs" />
     <Compile Include="Data Structures\MaxHeap.cs" />
     <Compile Include="Data Structures\MinimumSpanningTree.cs" />

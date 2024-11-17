@@ -12,9 +12,9 @@ DEBUG;TRACE
 C:\Users\monaj\source\repos\ST10096757_MoniqueJackson_MunicipalityApp_Part2\ST10096757_MoniqueJackson_MunicipalityApp_Part2\App.xaml
 10-1105655746
 11488488739
-33-6460037
+34-1843226683
 1312042086029
 Controls\MyOptions.xaml;Controls\myTextBox.xaml;Windows\EmergencyContactsWindow.xaml;MainWindow.xaml;MVVM\Views\EventDetailsView.xaml;MVVM\Views\Events_Announce_UC.xaml;MVVM\Views\ReportIssues.xaml;MVVM\Views\ServiceRequestStatusPage.xaml;MVVM\Views\ViewIssue_UC.xaml;Windows\WindowController.xaml;
 
-False
+True
 

@@ -18,12 +18,19 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models
 		public List<string> ProgressLogs { get; set; }
 
 		// Constructor with required parameters
-		public ServiceRequest(int requestId, string description, string status, string priority, DateTime submissionDate)
+		public ServiceRequest(
+			int requestId, string residentName, string contactDetails, string requestType, string description, 
+			string status, string priority, string assignedStaff, string location, DateTime submissionDate)
 		{
 			RequestId = requestId;
+			ResidentName = residentName;
+			ContactDetails = contactDetails;
+			RequestType = requestType;
 			Description = description;
 			Status = status;
 			Priority = priority;
+			AssignedStaff = assignedStaff;
+			Location = location;
 			SubmissionDate = submissionDate;
 			ProgressLogs = new List<string>(); // Initialize ProgressLogs as an empty list
 		}

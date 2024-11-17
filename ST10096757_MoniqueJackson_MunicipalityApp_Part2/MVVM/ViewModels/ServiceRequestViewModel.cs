@@ -9,6 +9,9 @@ using ST10096757_MoniqueJackson_MunicipalityApp_Part2;
 
 public class ServiceRequestViewModel : INotifyPropertyChanged
 {
+	private Graph _serviceRequestGraph;
+	private List<Edge> _mstEdges;
+
 	private BinarySearchTree serviceRequestTree;
 	private MaxHeap priorityQueue;
 	private ObservableCollection<ServiceRequest> _filteredServiceRequests;
@@ -90,6 +93,9 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		Categories = new List<string> { "All", "Pending", "In Progress", "Completed" };
 		Priorities = new List<string> { "All", "High", "Medium", "Low" };
 
+		_serviceRequestGraph = new Graph();
+		_mstEdges = new List<Edge>();
+
 		LoadServiceRequests();  // Load requests from JSON file
 	}
 
@@ -97,17 +103,51 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	public void LoadServiceRequests()
 	{
 		var serviceRequestManager = new ServiceRequestManager();
-		var serviceRequests = serviceRequestManager.LoadServiceRequests();
+		var serviceRequests = serviceRequestManager.LoadServiceRequests();  // This dictionary likely uses string keys
 
-		foreach (var request in serviceRequests.Values)
+		// Create a new dictionary with int keys
+		var serviceRequestsIntKey = serviceRequests.ToDictionary(
+			kvp => int.Parse(kvp.Key),  // Convert the string key to int
+			kvp => kvp.Value
+		);
+
+		// Now, serviceRequestsIntKey uses int as the key
+		foreach (var request in serviceRequestsIntKey.Values)
 		{
-			InsertRequestIntoTree(request);
-			InsertRequestIntoHeap(request);
-			AddToGraph(request);  // Add request dependencies to the graph
+			InsertRequestIntoTree(request);  // Insert into Binary Search Tree
+			InsertRequestIntoHeap(request);  // Insert into MaxHeap
+			AddToGraph(request, serviceRequestsIntKey);  // Add request dependencies to the graph
 		}
 
-		FilterRequests();
+		FilterRequests();  // Filter the requests after all are loaded
 	}
+
+	public void AddToGraph(ServiceRequest request, Dictionary<int, ServiceRequest> serviceRequests)
+	{
+		// Assuming you're working with a graph that has requests and edges
+		// Let's add edges between the current request and other requests based on priority or location
+
+		// Example: Add edges between this request and all other requests
+		foreach (var otherRequest in serviceRequests.Values)
+		{
+			if (request.RequestId != otherRequest.RequestId)
+			{
+				// Calculate the edge weight (could be based on priority or location)
+				double weight = CalculateEdgeWeight(request, otherRequest);
+
+				// Add an edge between these two requests
+				_serviceRequestGraph.AddEdge(request, otherRequest, weight);
+			}
+		}
+	}
+
+	private double CalculateEdgeWeight(ServiceRequest req1, ServiceRequest req2)
+	{
+		// Implement your logic here. For example, based on distance or priority
+		// Placeholder: return distance or priority weight
+		return Math.Abs(req1.Priority.CompareTo(req2.Priority)); // Example
+	}
+
 
 	// Insert a service request into the BinarySearchTree
 	public void InsertRequestIntoTree(ServiceRequest request)

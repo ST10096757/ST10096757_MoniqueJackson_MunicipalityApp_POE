@@ -41,15 +41,21 @@
 
         <!-- ListView -->
         <ListView x:Name="dataGridRequests" ItemsSource="{Binding FilteredServiceRequests}" 
-                  SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" Margin="10,110,10,10" 
-                  AlternationCount="2">
+          SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" Margin="10,110,10,10" 
+          AlternationCount="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding RequestId}" />
+                    <GridViewColumn Header="Resident Name" DisplayMemberBinding="{Binding ResidentName}" />
+                    <GridViewColumn Header="Contact Details" DisplayMemberBinding="{Binding ContactDetails}" />
+                    <GridViewColumn Header="Request Type" DisplayMemberBinding="{Binding RequestType}" />
                     <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" />
                     <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
-                    <GridViewColumn Header="Request Date" DisplayMemberBinding="{Binding DateCreated, StringFormat=\{0:yyyy-MM-dd\}}" />
+                    <GridViewColumn Header="Request Date" DisplayMemberBinding="{Binding SubmissionDate, StringFormat=\{0:yyyy-MM-dd\}}" />
                     <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" />
+                    <GridViewColumn Header="Assigned Staff" DisplayMemberBinding="{Binding AssignedStaff}" />
+                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" />
+                    <GridViewColumn Header="Progress Logs" DisplayMemberBinding="{Binding ProgressLogsString}" />
                 </GridView>
             </ListView.View>
         </ListView>

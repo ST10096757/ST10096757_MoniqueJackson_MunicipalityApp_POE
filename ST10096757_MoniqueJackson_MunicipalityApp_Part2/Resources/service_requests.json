@@ -9,7 +9,7 @@
     "Status": "Pending",
     "Priority": "High",
     "AssignedStaff": "John Doe",
-    "Location": "123 Elm St.",
+    "Location": "123 Elm St., Cape Town, Western Cape",
     "ProgressLogs": []
   },
   "2": {
@@ -22,7 +22,7 @@
     "Status": "In Progress",
     "Priority": "Medium",
     "AssignedStaff": "Sarah Lee",
-    "Location": "456 Oak St.",
+    "Location": "456 Oak St., Pretoria, Gauteng",
     "ProgressLogs": [ "Inspection completed", "Repair work started" ]
   },
   "3": {
@@ -35,7 +35,98 @@
     "Status": "Completed",
     "Priority": "High",
     "AssignedStaff": "Tom Green",
-    "Location": "789 Pine St.",
+    "Location": "789 Pine St., Durban, KwaZulu-Natal",
     "ProgressLogs": [ "Leak detected", "Repair completed" ]
+  },
+  "4": {
+    "RequestId": 4,
+    "ResidentName": "Lindiwe Nkosi",
+    "ContactDetails": "lindiwe.nkosi@example.com",
+    "RequestType": "Streetlight Repair",
+    "Description": "Streetlight outside my shop is flickering.",
+    "SubmissionDate": "2023-11-17T12:00:00",
+    "Status": "Pending",
+    "Priority": "Medium",
+    "AssignedStaff": "Musa Khumalo",
+    "Location": "11 Market St., Johannesburg, Gauteng",
+    "ProgressLogs": []
+  },
+  "5": {
+    "RequestId": 5,
+    "ResidentName": "Sipho Mthembu",
+    "ContactDetails": "sipho.mthembu@example.com",
+    "RequestType": "Sewer Blockage",
+    "Description": "The sewer line near my house is blocked and causing an overflow.",
+    "SubmissionDate": "2023-11-18T09:30:00",
+    "Status": "In Progress",
+    "Priority": "High",
+    "AssignedStaff": "Nandi Zulu",
+    "Location": "34 Blouberg Rd., Bloemfontein, Free State",
+    "ProgressLogs": [ "Blockage identified", "Clearing work started" ]
+  },
+  "6": {
+    "RequestId": 6,
+    "ResidentName": "Thabo Malema",
+    "ContactDetails": "thabo.malema@example.com",
+    "RequestType": "Pothole Repair",
+    "Description": "Multiple potholes along Main Rd. need urgent repair.",
+    "SubmissionDate": "2023-11-19T14:45:00",
+    "Status": "Pending",
+    "Priority": "High",
+    "AssignedStaff": "Zanele Moyo",
+    "Location": "89 Main Rd., Polokwane, Limpopo",
+    "ProgressLogs": []
+  },
+  "7": {
+    "RequestId": 7,
+    "ResidentName": "Rachel Mabuza",
+    "ContactDetails": "rachel.mabuza@example.com",
+    "RequestType": "Streetlight Repair",
+    "Description": "The streetlight on the corner of my street is out.",
+    "SubmissionDate": "2023-11-20T16:10:00",
+    "Status": "In Progress",
+    "Priority": "Low",
+    "AssignedStaff": "Jabu Mkhize",
+    "Location": "101 Mzimkhulu St., Port Elizabeth, Eastern Cape",
+    "ProgressLogs": [ "Inspection completed" ]
+  },
+  "8": {
+    "RequestId": 8,
+    "ResidentName": "Zanele Dlamini",
+    "ContactDetails": "zanele.dlamini@example.com",
+    "RequestType": "Water Leak",
+    "Description": "A small water leak in the backyard needs fixing.",
+    "SubmissionDate": "2023-11-21T10:05:00",
+    "Status": "Completed",
+    "Priority": "Medium",
+    "AssignedStaff": "Bongani Tshabalala",
+    "Location": "202 Pine Ave., Nelspruit, Mpumalanga",
+    "ProgressLogs": [ "Leak detected", "Repair completed" ]
+  },
+  "9": {
+    "RequestId": 9,
+    "ResidentName": "Kabelo Mokoena",
+    "ContactDetails": "kabelo.mokoena@example.com",
+    "RequestType": "Sewer Blockage",
+    "Description": "Overflowing sewer in my area.",
+    "SubmissionDate": "2023-11-17T18:30:00",
+    "Status": "In Progress",
+    "Priority": "High",
+    "AssignedStaff": "Lindiwe Mthembu",
+    "Location": "23 Church St., Kimberley, Northern Cape",
+    "ProgressLogs": [ "Inspection completed", "Clearing work started" ]
+  },
+  "10": {
+    "RequestId": 10,
+    "ResidentName": "Mpho Motsepe",
+    "ContactDetails": "mpho.motsepe@example.com",
+    "RequestType": "Pothole Repair",
+    "Description": "The potholes on the highway near the airport need fixing.",
+    "SubmissionDate": "2023-11-19T11:25:00",
+    "Status": "Pending",
+    "Priority": "High",
+    "AssignedStaff": "Sibusiso Nkosi",
+    "Location": "55 Airport Rd., East London, Eastern Cape",
+    "ProgressLogs": []
   }
 }
