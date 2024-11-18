@@ -32,7 +32,7 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 		private void btnSearch_Click(object sender, RoutedEventArgs e)
 		{
 			// Trigger the ViewModel's search functionality by setting the SearchQuery property
-			_viewModel.SearchQuery = txtRequestId.Text;
+			//_viewModel.SearchQuery = txtRequestId.Text;
 		}
 
 		private void Button_Click(object sender, RoutedEventArgs e)

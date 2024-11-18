@@ -8,6 +8,7 @@
 
     <Grid Background="#FBF8EF">
         <!-- Background color for the page -->
+
         <!-- Back Button -->
         <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Width="75" Height="30" Margin="10,10,0,0" 
@@ -62,7 +63,12 @@
             </ComboBox>
         </StackPanel>
 
-        <!-- ListView -->
+        <!-- Red-Black Tree Sorting Button -->
+        <Button Content="Sort by Submission Date" Command="{Binding SortByDateCommand}" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="650,120,10,0"
+                Width="160" Height="30" Background="#FF9800" Foreground="White" BorderBrush="#FF9800"/>
+
+        <!-- ListView to Display Service Requests -->
         <ListView x:Name="dataGridRequests" ItemsSource="{Binding FilteredServiceRequests}" 
                   SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" Margin="10,180,10,10" 
                   AlternationCount="2" Background="White" BorderBrush="#ddd" BorderThickness="1">

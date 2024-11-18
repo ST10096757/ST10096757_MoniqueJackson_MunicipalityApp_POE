@@ -39,31 +39,44 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 			if (!AdjacencyList.ContainsKey(start))
 			{
 				AdjacencyList[start] = new List<Edge>();
+				Console.WriteLine($"Node {start} added to adjacency list.");
 			}
 
 			if (!AdjacencyList.ContainsKey(end))
 			{
 				AdjacencyList[end] = new List<Edge>();
+				Console.WriteLine($"Node {end} added to adjacency list.");
 			}
 
 			var edge = new Edge(start, end, weight);
 			AdjacencyList[start].Add(edge);
-			AdjacencyList[end].Add(edge); // If it's undirected
+			AdjacencyList[end].Add(edge);
 
 			Console.WriteLine($"Edge added: {start} -> {end} with weight {weight}");
 		}
+
 		// Method to add a service request to the graph
 		public void AddRequest(ServiceRequest request)
 		{
 			if (!Requests.ContainsKey(request.RequestId))
 			{
-				Requests.Add(request.RequestId, request);
+				Requests.Add(request.RequestId, request);  // Add the request to the graph's requests dictionary
+			}
+			else
+			{
+				Console.WriteLine($"Request {request.RequestId} already in graph.");
 			}
 		}
 
 		// Display the graph
 		public void DisplayGraph()
 		{
+			Console.WriteLine($"Total Requests in Graph: {Requests.Count}");
+			foreach (var node in Requests)
+			{
+				Console.WriteLine($"Request {node.Key}: {node.Value.ResidentName}");
+			}
+
 			foreach (var node in AdjacencyList)
 			{
 				Console.WriteLine($"Node {node.Key}:");
@@ -83,6 +96,13 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 
 			// Start from an arbitrary node (for example, node 1)
 			int startNode = 1;
+
+			if (!AdjacencyList.ContainsKey(startNode))
+			{
+				Console.WriteLine($"Node {startNode} not found in adjacency list.");
+				return mstEdges; // Exit early if start node doesn't exist
+			}
+
 			visited.Add(startNode);
 
 			foreach (var edge in AdjacencyList[startNode])

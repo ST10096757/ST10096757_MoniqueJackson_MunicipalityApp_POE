@@ -3,7 +3,7 @@ using System;
 
 namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models
 {
-	public class ServiceRequest
+	public class ServiceRequest : IComparable<ServiceRequest>
 	{
 		public int RequestId { get; set; }
 		public string ResidentName { get; set; }
@@ -17,22 +17,30 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models
 		public string Location { get; set; }
 		public List<string> ProgressLogs { get; set; }
 
-		// Constructor with required parameters
-		public ServiceRequest(
-			int requestId, string residentName, string contactDetails, string requestType, string description, 
-			string status, string priority, string assignedStaff, string location, DateTime submissionDate)
+		// Constructor
+		public ServiceRequest(int requestId, string residentName, string contactDetails, string requestType,
+							  string description, DateTime submissionDate, string status,
+							  string priority, string assignedStaff, string location)
 		{
 			RequestId = requestId;
 			ResidentName = residentName;
 			ContactDetails = contactDetails;
 			RequestType = requestType;
 			Description = description;
+			SubmissionDate = submissionDate;
 			Status = status;
 			Priority = priority;
 			AssignedStaff = assignedStaff;
 			Location = location;
-			SubmissionDate = submissionDate;
-			ProgressLogs = new List<string>(); // Initialize ProgressLogs as an empty list
+			ProgressLogs = new List<string>();
+		}
+
+		// Compare service requests by SubmissionDate
+		public int CompareTo(ServiceRequest other)
+		{
+			if (other == null) return 1;
+
+			return this.SubmissionDate.CompareTo(other.SubmissionDate);
 		}
 	}
 }

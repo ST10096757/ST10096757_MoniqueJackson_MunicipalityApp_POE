@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="Data Structures\CustomPriorityQueue.cs" />
     <Compile Include="Data Structures\Graph.cs" />
+    <Compile Include="Data Structures\RedBlackTree.cs" />
     <Compile Include="Managers\ServiceRequestManager.cs" />
     <Compile Include="Data Structures\MaxHeap.cs" />
     <Compile Include="Data Structures\MinimumSpanningTree.cs" />

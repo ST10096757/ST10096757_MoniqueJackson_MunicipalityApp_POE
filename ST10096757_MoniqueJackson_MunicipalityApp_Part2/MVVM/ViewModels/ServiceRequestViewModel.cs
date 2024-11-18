@@ -10,12 +10,15 @@ using ST10096757_MoniqueJackson_MunicipalityApp_Part2.MVVM.Models;
 using System.Windows.Input;
 using System.Text;
 using System.Runtime.CompilerServices;
+using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Data_Structures;
 
 public class ServiceRequestViewModel : INotifyPropertyChanged
 {
 	private Graph _serviceRequestGraph;
 	private List<Edge> _mstEdges;
 	public ICommand GenerateMSTCommand { get; set; }
+
+	// Keep the automatic property for ServiceRequests with initialization
 	public ObservableCollection<ServiceRequest> ServiceRequests { get; set; } = new ObservableCollection<ServiceRequest>();
 
 	private BinarySearchTree serviceRequestTree;
@@ -25,6 +28,13 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	private string _selectedCategory;
 	private string _selectedPriority;
 	private ServiceRequest _selectedRequest;
+
+	// Red-Black Tree for sorting by Submission Date
+	private RedBlackTree<ServiceRequest> _serviceRequestTreeByDate;
+
+	// Command to trigger the sorting
+	public ICommand SortByDateCommand { get; set; }
+
 
 	public Graph Graph { get; set; }
 
@@ -138,6 +148,7 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		}
 	}
 
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 	public ServiceRequestViewModel()
 	{
@@ -152,6 +163,9 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		_mstEdges = new List<Edge>();
 		_displayGraphCommand = new RelayCommand(DisplayGraph);
 
+		ServiceRequests = new ObservableCollection<ServiceRequest>();
+
+
 		// Setting up lists
 		Categories = new List<string> { "All", "Pending", "In Progress", "Completed" };
 		Priorities = new List<string> { "All", "High", "Medium", "Low" };
@@ -159,48 +173,72 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 		// Defining command
 		GenerateMSTCommand = new RelayCommand(GenerateAndDisplayMST);
 
+		// Initialize Red-Black Tree for sorting by date
+		_serviceRequestTreeByDate = new RedBlackTree<ServiceRequest>();
+
+		// Define the SortByDateCommand
+		SortByDateCommand = new RelayCommand(SortServiceRequestsByDate);
+
 		// Load the service request data from the JSON file
 		LoadServiceRequests();
 	}
 
+
+
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 	// Load service requests from the JSON file and add them to the graph
+	// Load service requests into both the BST (for ID) and RBT (for submission date)
 	public void LoadServiceRequests()
 	{
 		var serviceRequestManager = new ServiceRequestManager();
 		var serviceRequests = serviceRequestManager.LoadServiceRequests();
 
-		// Converts the dictionary results (string keys) to a dictionary with int keys.
+		// Convert the dictionary from string keys to int keys (assuming the key is RequestId as string in serviceRequests)
 		var serviceRequestsIntKey = serviceRequests.ToDictionary(kvp => int.Parse(kvp.Key), kvp => kvp.Value);
 
-		// Add requests to the graph
+		// Convert and insert into the Red-Black Tree for sorting by submission date
 		foreach (var request in serviceRequestsIntKey.Values)
 		{
-			// Insert into Binary Search Tree - for searching
+			// Insert into Binary Search Tree for ID (assumes InsertRequestIntoTree is handling the BST)
 			InsertRequestIntoTree(request);
-			// Insert into MaxHeap - for prioritization
-			InsertRequestIntoHeap(request);
-			// Add request dependencies (edges) to the graph
-			AddToGraph(request, serviceRequestsIntKey);
+
+			// Insert into Red-Black Tree for sorting by submission date
+			_serviceRequestTreeByDate.Insert(request);
+
+			// Add the request to the graph
+			AddToGraph(request, serviceRequestsIntKey);  // Pass the correctly typed dictionary
 		}
 
-		// Compute and display MST from the Graph
-		var mstEdges = _serviceRequestGraph.ComputeMST();
-		// Update the filtered service requests based on the MST.
-		UpdateFilteredServiceRequests(mstEdges);
+		// Initialize filtered service requests
+		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(_serviceRequestTreeByDate.GetSortedItems());
 
-		// Filter the requests after all are loaded
+		// After loading all service requests, filter them by current filter settings
 		FilterRequests();
+	}
+
+	// Sort the requests by submission date using the Red-Black Tree
+	public void SortServiceRequestsByDate()
+	{
+		var sortedRequestsByDate = _serviceRequestTreeByDate.GetSortedItems();
+		FilteredServiceRequests = new ObservableCollection<ServiceRequest>(sortedRequestsByDate);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 	// Method to add dependencies (edges) between service requests in the graph
 	public void AddToGraph(ServiceRequest request, Dictionary<int, ServiceRequest> serviceRequests)
 	{
+		
+
 		// Add the service request to the Graph
 		if (!_serviceRequestGraph.Requests.ContainsKey(request.RequestId))
 		{
-			_serviceRequestGraph.AddRequest(request);  // Make sure the service request is added to the graph
+			_serviceRequestGraph.AddRequest(request);  // Add to graph
+			Console.WriteLine($"Request {request.RequestId} added to graph.");
+		}
+		else
+		{
+			Console.WriteLine($"Request {request.RequestId} already in graph.");
 		}
 
 		// Loops through all other requests in the serviceRequests dictionary.
@@ -212,6 +250,25 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 				double weight = CalculateEdgeWeight(request, otherRequest);
 				// Add the edge to the graph
 				_serviceRequestGraph.AddEdge(request.RequestId, otherRequest.RequestId, weight);
+				Console.WriteLine($"Edge added: {request.RequestId} -> {otherRequest.RequestId} with weight {weight}");
+			}
+		}
+
+		// Add the service request to the Graph
+		if (!Graph.Requests.ContainsKey(request.RequestId))
+		{
+			Graph.AddRequest(request);  // Make sure the service request is added to the graph
+		}
+
+		// Loops through all other requests in the serviceRequests dictionary.
+		foreach (var otherRequest in serviceRequests.Values)
+		{
+			if (request.RequestId != otherRequest.RequestId)
+			{
+				// Calculate the weight of the edge based on the requests' properties (e.g., priority)
+				double weight = CalculateEdgeWeight(request, otherRequest);
+				// Add the edge to the graph
+				Graph.AddEdge(request.RequestId, otherRequest.RequestId, weight);
 			}
 		}
 	}
@@ -257,21 +314,44 @@ public class ServiceRequestViewModel : INotifyPropertyChanged
 	// Display the graph and compute the MST
 	public void DisplayGraph()
 	{
-		// Example edges - this should be handled in LoadServiceRequests() or elsewhere in your program
-		Graph.AddEdge(1, 2, 1);
-		Graph.AddEdge(1, 3, 1);
-		Graph.AddEdge(2, 4, 1);
-		Graph.AddEdge(4, 5, 1);
+		// First, ensure the graph is populated by loading service requests
+		LoadServiceRequests();
 
-		// Check the graph before displaying
+		// Now the graph contains all service requests and their edges.
 		Console.WriteLine($"Total Requests in Graph: {Graph.Requests.Count}");
 
-		// Compute the MST
+		// Check if the adjacency list has the expected data
+		Console.WriteLine("Adjacency List Contents:");
+		foreach (var node in Graph.AdjacencyList)
+		{
+			Console.WriteLine($"Node {node.Key}:");
+			foreach (var edge in node.Value)
+			{
+				Console.WriteLine($"   -> {edge.End} with weight {edge.Weight}");
+			}
+		}
+
+		// If the graph has no requests or edges, exit early
+		if (Graph.Requests.Count == 0 || Graph.AdjacencyList.Count == 0)
+		{
+			Console.WriteLine("Graph is empty or not populated correctly.");
+			return;
+		}
+
+		// Compute the Minimum Spanning Tree (MST) from the graph
 		var mstEdges = Graph.ComputeMST();
 
-		// Optionally, generate a string to display graph info
+		// Optionally, generate a string to display the MST graph info
 		GraphDisplayText = GenerateGraphDisplayText(mstEdges);
+
+		// Optionally, log the MST edges to the console for debugging purposes
+		Console.WriteLine("Displaying MST Edges:");
+		foreach (var edge in mstEdges)
+		{
+			Console.WriteLine($"Edge: {edge.Start} -> {edge.End} with weight {edge.Weight}");
+		}
 	}
+
 
 	// Helper method to create a displayable text of the graph
 	private string GenerateGraphDisplayText(List<Edge> mstEdges)
