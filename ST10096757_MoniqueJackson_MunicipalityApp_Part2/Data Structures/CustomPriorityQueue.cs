@@ -7,13 +7,20 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 	public class CustomPriorityQueue<TElement, TPriority>
 	{
 		private SortedList<int, Queue<TElement>> _list;  // Use TElement instead of T
-
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Default Contructor
+		/// </summary>
 		public CustomPriorityQueue()
 		{
 			_list = new SortedList<int, Queue<TElement>>();  // Initialize the list of queues
 		}
-
-		// Enqueue method now accepts TElement
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Enqueue method now accepts TElement
+		/// </summary>
+		/// <param name="priority"></param>
+		/// <param name="item"></param>
 		public void Enqueue(int priority, TElement item)
 		{
 			if (!_list.ContainsKey(priority))
@@ -22,8 +29,12 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 			}
 			_list[priority].Enqueue(item);
 		}
-
-		// Dequeue method now returns TElement
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Dequeue method now returns TElement
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="InvalidOperationException"></exception>
 		public TElement Dequeue()
 		{
 			if (_list.Count == 0)
@@ -43,9 +54,10 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 
 			return item;  // Return TElement
 		}
-
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		public int Count => _list.Values.Sum(queue => queue.Count);  // Sum of all items in the queues
 
 		public bool IsEmpty() => _list.Count == 0;
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 	}
 }

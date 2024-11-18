@@ -6,7 +6,9 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 	// Basic Binary Search Tree to store service requests
 	public class BinarySearchTree
 	{
-		// Define the node of the tree (BSTNode)
+		/// <summary>
+		/// Define the node of the tree (BSTNode)
+		/// </summary>
 		public class TreeNode
 		{
 			public ServiceRequest Request { get; set; }  // ServiceRequest object stored in each node
@@ -20,15 +22,22 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 				Right = null;
 			}
 		}
-
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		private TreeNode root;  // The root of the binary search tree
 
+		/// <summary>
+		/// Default Contructor
+		/// </summary>
 		public BinarySearchTree()
 		{
 			root = null;  // Initialize the tree as empty
 		}
-
-		// Insert a new request into the BST
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Insert a new request into the BST
+		/// </summary>
+		/// <param name="request"></param>
+		/// <exception cref="ArgumentNullException"></exception>
 		public void Insert(ServiceRequest request)
 		{
 			if (request == null)
@@ -54,8 +63,12 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 
 			return root;  // Return the (possibly updated) root node
 		}
-
-		// Find a request by RequestId
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Find a request by RequestId
+		/// </summary>
+		/// <param name="requestId"></param>
+		/// <returns></returns>
 		public ServiceRequest Find(int requestId)
 		{
 			return FindRec(root, requestId);  // Start the search from the root
@@ -72,8 +85,11 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 
 			return FindRec(root.Right, requestId);
 		}
-
-		// In-order traversal to get all requests in sorted order by RequestId
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// In-order traversal to get all requests in sorted order by RequestId
+		/// </summary>
+		/// <param name="action"></param>
 		public void InOrderTraversal(Action<ServiceRequest> action)
 		{
 			InOrderTraversalRec(root, action);  // Start the traversal from the root
@@ -88,8 +104,11 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 				InOrderTraversalRec(root.Right, action); // Traverse right subtree
 			}
 		}
-
-		// Pre-order traversal (alternative order)
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Pre-order traversal (alternative order)
+		/// </summary>
+		/// <param name="action"></param>
 		public void PreOrderTraversal(Action<ServiceRequest> action)
 		{
 			PreOrderTraversalRec(root, action);  // Start pre-order traversal
@@ -104,8 +123,11 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 				PreOrderTraversalRec(root.Right, action); // Traverse right subtree
 			}
 		}
-
-		// Post-order traversal (alternative order)
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Post-order traversal (alternative order)
+		/// </summary>
+		/// <param name="action"></param>
 		public void PostOrderTraversal(Action<ServiceRequest> action)
 		{
 			PostOrderTraversalRec(root, action);  // Start post-order traversal
@@ -120,8 +142,11 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 				action(root.Request);                      // Process current node
 			}
 		}
-
-		// Get the smallest (minimum) request by RequestId
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Get the smallest (minimum) request by RequestId
+		/// </summary>
+		/// <returns></returns>
 		public ServiceRequest FindMin()
 		{
 			return FindMinRec(root);  // Find the minimum from the root
@@ -136,8 +161,11 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 
 			return root?.Request;  // Return the smallest request
 		}
-
-		// Get the largest (maximum) request by RequestId
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Get the largest (maximum) request by RequestId
+		/// </summary>
+		/// <returns></returns>
 		public ServiceRequest FindMax()
 		{
 			return FindMaxRec(root);  // Find the maximum from the root
@@ -152,8 +180,10 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 
 			return root?.Request;  // Return the largest request
 		}
-
-		// Display all requests (for debugging purposes)
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Display all requests (for debugging purposes)
+		/// </summary>
 		public void DisplayServiceRequestsInOrder()
 		{
 			InOrderTraversal(request =>
@@ -161,5 +191,6 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 				Console.WriteLine($"RequestId: {request.RequestId}, Description: {request.Description}, Status: {request.Status}");
 			});
 		}
+		//---------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 	}
 }
