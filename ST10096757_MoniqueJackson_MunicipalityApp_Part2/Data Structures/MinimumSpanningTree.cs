@@ -28,23 +28,19 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2
 			{
 				var edge = priorityQueue.Dequeue();  // Get the edge with the minimum weight
 
-				// If we haven't visited the end node of this edge yet, we add it to the MST
 				if (!visited.Contains(edge.End))
 				{
-					visited.Add(edge.End);  // Mark the end node as visited
+					visited.Add(edge.End);
 					mst.Add(edge);  // Add the edge to the MST
-
-					// Add all the adjacent edges to the priority queue
 					foreach (var nextEdge in graph.AdjacencyList[edge.End])
 					{
-						if (!visited.Contains(nextEdge.End))  // Only consider unvisited nodes
+						if (!visited.Contains(nextEdge.End))
 						{
-							priorityQueue.Enqueue((int)nextEdge.Weight, nextEdge);  // Enqueue the edge with its weight as the priority
+							priorityQueue.Enqueue((int)nextEdge.Weight, nextEdge);  // Enqueue the edge with its weight
 						}
 					}
 				}
 			}
-
 			return mst;  // Return the list of edges that form the MST
 		}
 	}

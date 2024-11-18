@@ -11,10 +11,6 @@
         <TextBox x:Name="txtRequestId" Width="200" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10"
                  Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"  />
 
-        <!-- Search Button -->
-        <Button Content="Search" Width="100" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="220,10,10,10"
-                Command="{Binding SearchCommand}" />
-
         <Button Content="Generate MST" Command="{Binding GenerateMSTCommand}" 
         HorizontalAlignment="Left" VerticalAlignment="Top" Margin="350,10,10,10"/>
 
@@ -70,5 +66,17 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <!-- Bind to the MST edges -->
+        <ListBox ItemsSource="{Binding MstEdges}" Margin="10,450,10,10">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Start}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Display graph summary -->
+        <TextBox Text="{Binding GraphDisplayText}" Margin="10,550,10,10" />
     </Grid>
 </UserControl>
