@@ -79,7 +79,7 @@ Emergency Contacts: Access emergency contact information easily.
 Bill of Responsibilities: Read about user responsibilities as a South African.
 
 
-NAVIGATION: (For images, please see external README)
+NAVIGATION: (For images, please see README PDF file saved in this repo)
 
 The apps opens on the Main Menu:
 
