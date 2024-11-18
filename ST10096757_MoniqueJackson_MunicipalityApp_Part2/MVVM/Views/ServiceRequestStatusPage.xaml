@@ -6,77 +6,81 @@
              x:Name="ServiceRequestPage"
              Height="600" Width="900">
 
-    <Grid>
+    <Grid Background="#FBF8EF">
+        <!-- Background color for the page -->
+        <!-- Back Button -->
+        <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                Width="75" Height="30" Margin="10,10,0,0" 
+                Command="{Binding BackCommand}" Click="Button_Click" />
+
+        <!-- Title at the top -->
+        <TextBlock Text="Service Request Status"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="0,10,0,0"
+                   Foreground="#062C30"/>
+
         <!-- Search Box -->
-        <TextBox x:Name="txtRequestId" Width="200" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10"
-                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"  />
+        <TextBox x:Name="txtRequestId" Width="250" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,60,0,0"
+                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Padding="10" Background="#CDE8E5" />
 
+        <!-- Generate MST Button -->
         <Button Content="Generate MST" Command="{Binding GenerateMSTCommand}" 
-        HorizontalAlignment="Left" VerticalAlignment="Top" Margin="350,10,10,10"/>
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="280,60,10,0" 
+                Width="120" Height="30" Background="#4CAF50" Foreground="White" BorderBrush="#4CAF50"/>
 
+        <!-- Display Graph Button -->
         <Button Content="Display Graph" Command="{Binding DisplayGraphCommand}" 
-            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="480,10,10,10"/>
-        <TextBox Text="{Binding GraphDisplayText}" IsReadOnly="True" Width="125" Height="50"
-            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="480,60,10,10"/>
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="420,60,10,0"
+                Width="120" Height="30" Background="#2196F3" Foreground="White" BorderBrush="#2196F3"/>
+
+        <!-- Graph Display TextBox -->
+        <TextBox Text="{Binding GraphDisplayText}" IsReadOnly="True" Width="250" Height="50"
+                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="560,60,10,0" Padding="5"/>
 
         <!-- Status Filter ComboBox with Label -->
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,60,10,10">
-            <Label Content="Status Filter" />
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,120,10,0">
+            <Label Content="Status Filter" HorizontalAlignment="Left" />
             <ComboBox x:Name="cmbStatusFilter" Width="200" VerticalAlignment="Top" 
-              SelectedItem="{Binding SelectedCategory, Mode=TwoWay}">
+                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" Padding="5">
                 <ComboBox.ItemsSource>
                     <Binding Path="Categories" />
                 </ComboBox.ItemsSource>
             </ComboBox>
         </StackPanel>
 
-
         <!-- Priority Filter ComboBox with Label -->
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,60,10,10">
-            <Label Content="Priority Filter" />
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,120,10,0">
+            <Label Content="Priority Filter" HorizontalAlignment="Left" />
             <ComboBox x:Name="cmbPriorityFilter" Width="200" VerticalAlignment="Top" 
-              SelectedItem="{Binding SelectedPriority, Mode=TwoWay}">
+                      SelectedItem="{Binding SelectedPriority, Mode=TwoWay}" Padding="5">
                 <ComboBox.ItemsSource>
                     <Binding Path="Priorities" />
                 </ComboBox.ItemsSource>
             </ComboBox>
-
-            
         </StackPanel>
-        
-        
 
         <!-- ListView -->
         <ListView x:Name="dataGridRequests" ItemsSource="{Binding FilteredServiceRequests}" 
-          SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" Margin="10,150,10,10" 
-          AlternationCount="2">
+                  SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" Margin="10,180,10,10" 
+                  AlternationCount="2" Background="White" BorderBrush="#ddd" BorderThickness="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding RequestId}" />
-                    <GridViewColumn Header="Resident Name" DisplayMemberBinding="{Binding ResidentName}" />
-                    <GridViewColumn Header="Contact Details" DisplayMemberBinding="{Binding ContactDetails}" />
-                    <GridViewColumn Header="Request Type" DisplayMemberBinding="{Binding RequestType}" />
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" />
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
-                    <GridViewColumn Header="Request Date" DisplayMemberBinding="{Binding SubmissionDate, StringFormat=\{0:yyyy-MM-dd\}}" />
-                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" />
-                    <GridViewColumn Header="Assigned Staff" DisplayMemberBinding="{Binding AssignedStaff}" />
-                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" />
-                    <GridViewColumn Header="Progress Logs" DisplayMemberBinding="{Binding ProgressLogsString}" />
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding RequestId}" Width="60"/>
+                    <GridViewColumn Header="Resident Name" DisplayMemberBinding="{Binding ResidentName}" Width="150"/>
+                    <GridViewColumn Header="Contact Details" DisplayMemberBinding="{Binding ContactDetails}" Width="150"/>
+                    <GridViewColumn Header="Request Type" DisplayMemberBinding="{Binding RequestType}" Width="120"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100"/>
+                    <GridViewColumn Header="Request Date" DisplayMemberBinding="{Binding SubmissionDate, StringFormat=\{0:yyyy-MM-dd\}}" Width="120"/>
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="100"/>
+                    <GridViewColumn Header="Assigned Staff" DisplayMemberBinding="{Binding AssignedStaff}" Width="120"/>
+                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" Width="120"/>
+                    <GridViewColumn Header="Progress Logs" DisplayMemberBinding="{Binding ProgressLogsString}" Width="180"/>
                 </GridView>
             </ListView.View>
         </ListView>
-
-        <!-- Bind to the MST edges -->
-        <ListBox ItemsSource="{Binding MstEdges}" Margin="10,450,10,10">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Start}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <!-- Display graph summary -->
-        <TextBox Text="{Binding GraphDisplayText}" Margin="10,550,10,10" />
     </Grid>
 </UserControl>

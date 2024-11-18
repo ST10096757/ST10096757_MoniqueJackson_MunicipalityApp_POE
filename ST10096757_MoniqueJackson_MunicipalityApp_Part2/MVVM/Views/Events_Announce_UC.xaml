@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              Height="600" Width="900">
     <!-- Increased height for recommendations -->
-    <Grid>
+    <Grid Background="#FBF8EF">
         <StackPanel Margin="10">
             <TextBlock Text="Local Events and Announcements" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
 

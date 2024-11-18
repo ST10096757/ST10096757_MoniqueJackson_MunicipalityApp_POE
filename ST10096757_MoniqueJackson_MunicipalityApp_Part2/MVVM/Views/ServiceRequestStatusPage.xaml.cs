@@ -1,6 +1,7 @@
 ﻿using ST10096757_MoniqueJackson_MunicipalityApp_Part2.Models;
 using ST10096757_MoniqueJackson_MunicipalityApp_Part2.ViewModels;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -34,32 +35,22 @@ namespace ST10096757_MoniqueJackson_MunicipalityApp_Part2.Views
 			_viewModel.SearchQuery = txtRequestId.Text;
 		}
 
-		/// <summary>
-		/// Status Filter ComboBox Selection Changed
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		//private void cmbStatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		//{
-		//	// Trigger the ViewModel's filtering functionality by setting the SelectedCategory
-		//	if (cmbStatusFilter.SelectedItem is ComboBoxItem selectedItem)
-		//	{
-		//		_viewModel.SelectedCategory = selectedItem.Content.ToString();
-		//	}
-		//}
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			// Check if MainActivity is already open
+			var existingWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
+			if (existingWindow != null)
+			{
+				existingWindow.Activate(); // Bring the existing window to the front
+			}
+			else
+			{
+				MainWindow mainActivity = new MainWindow();
+				mainActivity.Show(); // Show the main activity
+			}
 
-		/// <summary>
-		/// Priority Filter ComboBox Selection Changed
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		//private void cmbPriorityFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		//{
-		//	// Trigger the ViewModel's filtering functionality by setting the SelectedPriority
-		//	if (cmbPriorityFilter.SelectedItem is ComboBoxItem selectedItem)
-		//	{
-		//		_viewModel.SelectedPriority = selectedItem.Content.ToString();
-		//	}
-		//}
+			// Close the current WindowController
+			Window.GetWindow(this)?.Close();
+		}
 	}
 }
